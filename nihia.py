@@ -151,14 +151,14 @@ def buttonSetLight(buttonName, lightMode):
     dataOut(buttons.get(buttonName, ""), lightModes.get(lightMode, ""))
 
 
+# Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
+# and their corresponding identificative bytes
 mixerinfo_types = {
     "VOLUME": 0x50,
     "PAN": 0x58,
     "IS_MUTED": 0x43,
     "IS_SOLOED": 0x44,
     "NAME": 0x48,
-
-
 }
 
 # Method for reporting information about the mixer tracks
