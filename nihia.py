@@ -62,7 +62,6 @@ buttons = {
     "MUTE": 0x43,
     "SOLO": 0x44,
 
-    # Only on Maschine MK3, Maschine Studio and S-Series MK2 (TODO: NOT TESTED)
     "DPAD_X": 0x32,
     "DPAD_Y": 0x30
 }
