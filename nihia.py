@@ -44,26 +44,26 @@ import utils
 # The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
 # sent or recieved from the device
 buttons = {
-    "PLAY": 0x10,
-    "RESTART": 0x11,
-    "REC": 0x12,
-    "COUNT_IN": 0x13,
-    "STOP": 0x14,
-    "CLEAR": 0x15,
-    "LOOP": 0x16,
-    "METRO": 0x17,
-    "TEMPO": 0x18,
+    "PLAY": 16,
+    "RESTART": 17,
+    "REC": 18,
+    "COUNT_IN": 19,
+    "STOP": 20,
+    "CLEAR": 21,
+    "LOOP": 22,
+    "METRO": 23,
+    "TEMPO": 24,
     
-    "UNDO": 0x20,
-    "REDO": 0x21,
-    "QUANTIZE": 0x22,
-    "AUTO": 0x23,
+    "UNDO": 32,
+    "REDO": 33,
+    "QUANTIZE": 34,
+    "AUTO": 35,
 
-    "MUTE": 0x43,
-    "SOLO": 0x44,
+    "MUTE": 67,
+    "SOLO": 68,
 
-    "DPAD_X": 0x32,
-    "DPAD_Y": 0x30
+    "DPAD_X": 50,
+    "DPAD_Y": 48
 }
 
 
@@ -78,7 +78,7 @@ def dataOut(data1, data2):
     data1, data2 -- Corresponding bytes of the MIDI message in hex format."""
     
     # Composes the MIDI message and sends it
-    device.midiOutSysex(bytes([0xF0, 0xBF, data1, data2, 0xF7]))
+    device.midiOutSysex(bytes([240, 191, data1, data2, 247]))
 
 
 # dataOut method but using int values
@@ -92,7 +92,7 @@ def dataOut(data1, data2):
     #     # Converts the values from int to hex format
 
     #     # Composes the MIDI message and sends it
-    #     # device.midiOutSysex(bytes([0xF0, 0xBF, hex(data1), hex(data2), 0x14, 0x0C, 1, 0xF7]))
+    #     # device.midiOutSysex(bytes([240, 191, hex(data1), hex(data2), 0x14, 0x0C, 1, 247]))
 
 
 # Method to enable the deep integration features on the device
@@ -102,7 +102,7 @@ def handShake():
     was successful and returns True if affirmative."""
 
     # Sends the MIDI message that initiates the handshake: BF 01 01
-    dataOut(0x01, 0x01)
+    dataOut(1, 1)
 
     # TODO: Waits and reads the handshake confirmation message
 
@@ -114,7 +114,7 @@ def goodBye():
     Intended to be executed before FL Studio closes."""
 
     # Sends the goodbye message: BF 02 01
-    dataOut(0x02, 0x01)
+    dataOut(0x02, 1)
 
 
 # Method for restarting the protocol on demand. Intended to be used by the end user in case the keyboard behaves 
@@ -143,8 +143,8 @@ def buttonSetLight(buttonName, lightMode):
 
     #Light mode integer to light mode hex dictionary
     lightModes = {
-        0: 0x00,
-        1: 0x01
+        0: 0,
+        1: 1
     }
 
     # Then sends the MIDI message using dataOut
@@ -156,11 +156,11 @@ def buttonSetLight(buttonName, lightMode):
 
 
 mixerinfo_types = {
-    "VOLUME": 0x46,
-    "PAN": 0x47,
-    "IS_MUTED": 0x43,
-    "IS_SOLOED": 0x44,
-    "NAME": 0x48,
+    "VOLUME": 70,
+    "PAN": 71,
+    "IS_MUTED": 67,
+    "IS_SOLOED": 68,
+    "NAME": 72,
 }
 
 # Method for reporting information about the mixer tracks
@@ -170,20 +170,41 @@ def mixerInfo(info_type, value, trackID):
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
-    value -- Can be 0x00 or 0x01. Used for two-state properties like to tell if the track is solo-ed or not.
+    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
     
-    trackID -- From 0x00 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about."""
+    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about."""
 
-    device.midiOutSysex(bytes([0xF0, 0x00, 0x21, 0x09, 0x00, 0x00, 0x44, 0x43, 0x01, 0x00, mixerinfo_types.get(info_type, 0x00), value, trackID]))
+    device.midiOutSysex(bytes([240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID, 247]))
 
-def mixerInfo(info_type, value, trackID, additional_info):
+# Couldn't make this one as a variant of mixerInfo since FL Studio interpreter doesn't seem to support it
+def mixerInfoExt(info_type, value, trackID, additional_info):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
-    value -- Can be 0x00 or 0x01. Used for two-state properties like to tell if the track is solo-ed or not.
+    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
     
-    trackID -- From 0x00 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
+    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
     
     additional_info -- Used for track name, track pan and track volume.
     """
+    # # Define string to hex conversion for when reporting track names
+    # if info_type == "NAME":
+    #     # Takes the string and encodes it in UTF-8, generating a bytes property for the variable
+    #     additional_info = bytes(additional_info, "UTF-8")
+
+    # Tells Python that the additional_info argument is in UTF-8
+    additional_info = additional_info.encode("UTF-8")
+    
+    # Conforms the kind of message midiOutSysex is waiting for
+
+    msg = [240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID]
+
+    msg = bytes(msg)
+
+    # Warps the data and sends it to the device
+    device.midiOutSysex(msg)
+
+    print(msg)
+
+    print(([240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0] + list(bytes(additional_info))))
