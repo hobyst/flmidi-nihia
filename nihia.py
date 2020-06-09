@@ -98,7 +98,7 @@ def goodBye():
     Intended to be executed before FL Studio closes."""
 
     # Sends the goodbye message: BF 02 01
-    dataOut(0x02, 1)
+    dataOut(2, 1)
 
 
 # Method for restarting the protocol on demand. Intended to be used by the end user in case the keyboard behaves 
