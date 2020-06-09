@@ -164,47 +164,34 @@ mixerinfo_types = {
 }
 
 # Method for reporting information about the mixer tracks
-# TODO
-def mixerInfo(info_type, value, trackID):
-    """ Sends info about the mixer tracks to the device.
-    
-    info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
-    
-    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
-    
-    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about."""
-
-    device.midiOutSysex(bytes([240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID, 247]))
 
 # Couldn't make this one as a variant of mixerInfo since FL Studio interpreter doesn't seem to support it
-def mixerInfoExt(info_type, value, trackID, additional_info):
+def mixerInfo(info_type, trackID, value, additional_info=""):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
-    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
-    
     trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
+
+    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
     
     additional_info -- Used for track name, track pan and track volume.
     """
-    # # Define string to hex conversion for when reporting track names
-    # if info_type == "NAME":
-    #     # Takes the string and encodes it in UTF-8, generating a bytes property for the variable
-    #     additional_info = bytes(additional_info, "UTF-8")
 
-    # Tells Python that the additional_info argument is in UTF-8
-    additional_info = additional_info.encode("UTF-8")
-    
-    # Conforms the kind of message midiOutSysex is waiting for
+    # Defines the behaviour for when additional info is reported
+    if additional_info != "":
 
-    msg = [240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID]
+        # Tells Python that the additional_info argument is in UTF-8
+        additional_info = additional_info.encode("UTF-8")
+        
+        # Conforms the kind of message midiOutSysex is waiting for
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID] + list(bytes(additional_info)) + [247]
 
-    msg = bytes(msg)
+        # Warps the data and sends it to the device
+        device.midiOutSysex(bytes(msg))
 
-    # Warps the data and sends it to the device
-    device.midiOutSysex(msg)
-
-    print(msg)
-
-    print(([240, 0, 0x21, 0x09, 0, 0, 0x44, 0x43, 1, 0] + list(bytes(additional_info))))
+    # Defines how the method should work normally
+    else:
+        
+        # Takes the information and wraps it on how it should be sent and sends the message
+        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID, 247]))
