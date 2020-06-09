@@ -80,21 +80,6 @@ def dataOut(data1, data2):
     # Composes the MIDI message and sends it
     device.midiOutSysex(bytes([240, 191, data1, data2, 247]))
 
-
-# dataOut method but using int values
-# DOESN'T WORK
-# def dataOutInt(data1, data2):
-    #     """ Variant of the dataOut method, but instead of having to use hex values you input int values
-    #     and these get automatically converted to hex, the message is composed and then sent to the device. 
-    
-    #     data1, data2 -- Corresponding bytes of the MIDI message in integer format."""
-
-    #     # Converts the values from int to hex format
-
-    #     # Composes the MIDI message and sends it
-    #     # device.midiOutSysex(bytes([240, 191, hex(data1), hex(data2), 0x14, 0x0C, 1, 247]))
-
-
 # Method to enable the deep integration features on the device
 def handShake():
     """ Acknowledges the device that a compatible host has been launched, wakes it up from MIDI mode and activates the deep
@@ -105,8 +90,7 @@ def handShake():
     dataOut(1, 1)
 
     # TODO: Waits and reads the handshake confirmation message
-
-    
+   
 
 # Method to deactivate the deep integration mode. Intended to be executed on close.
 def goodBye():
@@ -153,39 +137,41 @@ def buttonSetLight(buttonName, lightMode):
 
 # Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
 # and their corresponding identificative bytes
-
-
 mixerinfo_types = {
     "VOLUME": 70,
     "PAN": 71,
-    "IS_MUTED": 67,
-    "IS_SOLOED": 68,
+    "IS_MUTE": 67,
+    "IS_SOLO": 68,
     "NAME": 72,
 }
 
-# Method for reporting information about the mixer tracks
 
-# Couldn't make this one as a variant of mixerInfo since FL Studio interpreter doesn't seem to support it
-def mixerInfo(info_type, trackID, value, additional_info=""):
+# Method for reporting information about the mixer tracks
+# Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
+def mixerInfo(info_type: str, trackID: int, **kwargs: int or str):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
     trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
 
-    value -- Can be 0 or 1. Used for two-state properties like to tell if the track is solo-ed or not.
+    value -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
     
-    additional_info -- Used for track name, track pan and track volume.
+    info -- Used for track name, track pan and track volume.
     """
 
-    # Defines the behaviour for when additional info is reported
-    if additional_info != "":
+    #Gets the inputed values for the optional arguments from **kwargs
+    value = kwargs.get("value", 0)
+    info = kwargs.get("info", None)
+
+    # Defines the behaviour for when additional info is reported (for track name, track pan and track volume)
+    if info != None:
 
         # Tells Python that the additional_info argument is in UTF-8
-        additional_info = additional_info.encode("UTF-8")
+        info = info.encode("UTF-8")
         
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID] + list(bytes(additional_info)) + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID] + list(bytes(info)) + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
