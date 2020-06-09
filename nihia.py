@@ -159,7 +159,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
-    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
+    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
 
     value -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
     
