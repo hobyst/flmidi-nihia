@@ -143,17 +143,23 @@ mixerinfo_types = {
     "IS_MUTE": 67,
     "IS_SOLO": 68,
     "NAME": 72,
+    
+    # This one makes more sense on DAWs that create more tracks as the user requests it, as there might be projects (for example) on Ableton Live
+    # with only two tracks
+    # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
+    # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
+    "EXIST": 64
 }
 
 
 # Method for reporting information about the mixer tracks
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
-def mixerInfo(info_type: str, trackID: int, **kwargs: int or str):
+def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
     
-    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the mixer you're going to tell info about.
+    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
 
     value -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
     
