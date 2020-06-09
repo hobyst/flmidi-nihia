@@ -143,6 +143,12 @@ mixerinfo_types = {
     "IS_MUTE": 67,
     "IS_SOLO": 68,
     "NAME": 72,
+    
+    # This one makes more sense on DAWs that create more tracks as the user requests it, as there might be projects (for example) on Ableton Live
+    # with only two tracks
+    # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
+    # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
+    "EXIST": 64
 }
 
 
