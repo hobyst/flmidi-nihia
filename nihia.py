@@ -154,7 +154,7 @@ mixerinfo_types = {
 
 # Method for reporting information about the mixer tracks
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
-def mixerInfo(info_type: str, trackID: int, **kwargs: int or str):
+def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
