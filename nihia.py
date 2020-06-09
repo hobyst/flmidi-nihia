@@ -153,9 +153,11 @@ def buttonSetLight(buttonName, lightMode):
 
 # Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
 # and their corresponding identificative bytes
+
+
 mixerinfo_types = {
-    "VOLUME": 0x50,
-    "PAN": 0x58,
+    "VOLUME": 0x46,
+    "PAN": 0x47,
     "IS_MUTED": 0x43,
     "IS_SOLOED": 0x44,
     "NAME": 0x48,
@@ -174,7 +176,7 @@ def mixerInfo(info_type, value, trackID):
 
     device.midiOutSysex(bytes([0xF0, 0x00, 0x21, 0x09, 0x00, 0x00, 0x44, 0x43, 0x01, 0x00, mixerinfo_types.get(info_type, 0x00), value, trackID]))
 
-def mixerInfo2(info_type, value, trackID, additional_info):
+def mixerInfo(info_type, value, trackID, additional_info):
     """ Sends info about the mixer tracks to the device.
     
     info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
@@ -185,4 +187,3 @@ def mixerInfo2(info_type, value, trackID, additional_info):
     
     additional_info -- Used for track name, track pan and track volume.
     """
-
