@@ -62,11 +62,16 @@ buttons = {
     "MUTE": 67,
     "SOLO": 68,
 
-    "DPAD_X": 50,
-    "DPAD_Y": 48,
-
     # The 4D encoder events use the same data1, but different data2
     # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
+    "ENCODER_BUTTON": 96,
+    
+    "ENCODER_RIGHT": [50, 1],
+    "ENCODER_LEFT": [50, 127],
+    
+    "ENCODER_UP": [48, 127],
+    "ENCODER_DOWN": [48, 1],
+
     "ENCODER_PLUS": [52, 1],
     "ENCODER_MINUS": [52, 127]
 }
