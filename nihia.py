@@ -63,7 +63,12 @@ buttons = {
     "SOLO": 68,
 
     "DPAD_X": 50,
-    "DPAD_Y": 48
+    "DPAD_Y": 48,
+
+    # The 4D encoder events use the same data1, but different data2
+    # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
+    "ENCODER_PLUS": [52, 1],
+    "ENCODER_MINUS": [52, 127]
 }
 
 
@@ -132,7 +137,7 @@ def buttonSetLight(buttonName, lightMode):
     }
 
     # Then sends the MIDI message using dataOut
-    dataOut(buttons.get(buttonName, ""), lightModes.get(lightMode, ""))
+    dataOut(buttons.get(buttonName), lightModes.get(lightMode))
 
 
 # Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
@@ -148,7 +153,8 @@ mixerinfo_types = {
     # with only two tracks
     # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
     # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
-    "EXIST": 64
+    "EXIST": 64,
+    "SELECTED": 66,
 }
 
 
@@ -166,7 +172,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     info -- Used for track name, track pan and track volume.
     """
 
-    #Gets the inputed values for the optional arguments from **kwargs
+    # Gets the inputed values for the optional arguments from **kwargs
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
 
@@ -177,7 +183,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
         info = info.encode("UTF-8")
         
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID] + list(bytes(info)) + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + list(bytes(info)) + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
@@ -186,4 +192,4 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     else:
         
         # Takes the information and wraps it on how it should be sent and sends the message
-        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID, 247]))
+        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID, 247]))
