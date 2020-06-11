@@ -62,20 +62,30 @@ buttons = {
     "MUTE": 67,
     "SOLO": 68,
 
-    "DPAD_X": 50,
-    "DPAD_Y": 48
+    # The 4D encoder events use the same data1, but different data2
+    # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
+    "ENCODER_BUTTON": 96,
+    
+    "ENCODER_RIGHT": [50, 1],
+    "ENCODER_LEFT": [50, 127],
+    
+    "ENCODER_UP": [48, 127],
+    "ENCODER_DOWN": [48, 1],
+
+    "ENCODER_PLUS": [52, 1],
+    "ENCODER_MINUS": [52, 127]
 }
 
 
 # Method to make talking to the device less annoying
 # All the messages the device is expecting have a structure of "BF XX XX"
 # The STATUS byte always stays the same and only the DATA1 and DATA2 vary
-def dataOut(data1, data2):
+def dataOut(data1: int or hex, data2: int or hex):
     """ Function for easing the communication with the device. By just entering the DATA1 and DATA2 bytes of the MIDI message that has to be sent to the device, it 
     composes the full message in order to satisfy the syntax required by the midiOutSysex method, 
     as well as setting the STATUS of the message to BF as expected and sends the message. 
     
-    data1, data2 -- Corresponding bytes of the MIDI message in hex format."""
+    data1, data2 -- Corresponding bytes of the MIDI message."""
     
     # Composes the MIDI message and sends it
     device.midiOutSysex(bytes([240, 191, data1, data2, 247]))
@@ -116,7 +126,7 @@ def restartProtocol():
 # Method for controlling the lighting on the buttons (for those who have idle/highlighted two state lights)
 # Examples of this kind of buttons are the PLAY or REC buttons, where the PLAY button alternates between low and high light and so on.
 # SHIFT buttons are also included in this range of buttons, but instead of low/high light they alternate between on/off light states.
-def buttonSetLight(buttonName, lightMode):
+def buttonSetLight(buttonName: str, lightMode: int):
     """ Method for controlling the lights on the buttons of the device. 
     
     buttonName -- Name of the button as shown in the device in caps and enclosed in quotes. ("PLAY", "AUTO", "REDO"...)
@@ -132,7 +142,7 @@ def buttonSetLight(buttonName, lightMode):
     }
 
     # Then sends the MIDI message using dataOut
-    dataOut(buttons.get(buttonName, ""), lightModes.get(lightMode, ""))
+    dataOut(buttons.get(buttonName), lightModes.get(lightMode))
 
 
 # Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
@@ -148,25 +158,30 @@ mixerinfo_types = {
     # with only two tracks
     # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
     # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
-    "EXIST": 64
+    "EXIST": 64,
+    "SELECTED": 66,
 }
 
 
-# Method for reporting information about the mixer tracks
+# Method for reporting information about the mixer tracks, which is done through Sysex
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
-def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
+def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     """ Sends info about the mixer tracks to the device.
     
-    info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...)
+    info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on nihia.mixerinfo_types
     
-    trackID -- From 0 to 0x07. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
+    trackID -- From 0 to 7. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
 
-    value -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
+    Third agument depends on what kind of information you are going to send:
+
+    value (integer) -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
     
-    info -- Used for track name, track pan and track volume.
+    or
+
+    info (string) -- Used for track name, track pan and track volume.
     """
 
-    #Gets the inputed values for the optional arguments from **kwargs
+    # Gets the inputed values for the optional arguments from **kwargs
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
 
@@ -177,7 +192,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
         info = info.encode("UTF-8")
         
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID] + list(bytes(info)) + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + list(bytes(info)) + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
@@ -186,4 +201,4 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs: int or str):
     else:
         
         # Takes the information and wraps it on how it should be sent and sends the message
-        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type, 0), value, trackID, 247]))
+        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID, 247]))
