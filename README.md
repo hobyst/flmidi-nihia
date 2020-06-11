@@ -3,5 +3,5 @@
 
 (still under development)
 
-Used DrivenByMoss by Jürgen Moßgraber as a reference:
+References:
 https://github.com/git-moss/DrivenByMoss
