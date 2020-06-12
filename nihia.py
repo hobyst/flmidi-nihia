@@ -42,90 +42,6 @@ import playlist
 import midi
 import utils
 
-buttons = {
-    "PLAY": 16,
-    "RESTART": 17,
-    "REC": 18,
-    "COUNT_IN": 19,
-    "STOP": 20,
-    "CLEAR": 21,
-    "LOOP": 22,
-    "METRO": 23,
-    "TEMPO": 24,
-    
-    "UNDO": 32,
-    "REDO": 33,
-    "QUANTIZE": 34,
-    "AUTO": 35,
-
-    "MUTE": 67,
-    "SOLO": 68,
-
-    # The 4D encoder events use the same data1, but different data2
-    # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
-    "ENCODER_BUTTON": 96,
-    
-    "ENCODER_RIGHT": [50, 1],
-    "ENCODER_LEFT": [50, 127],
-    
-    "ENCODER_UP": [48, 127],
-    "ENCODER_DOWN": [48, 1],
-
-    "ENCODER_PLUS": [52, 1],
-    "ENCODER_MINUS": [52, 127]
-}
-
-knobs = {
-    "KNOB_1A_PLUS": [80, 1],
-    "KNOB_1A_MINUS": [80, 127],
-
-    "KNOB_2A_PLUS": [81, 1],
-    "KNOB_2A_MINUS": [81, 127],
-
-    "KNOB_3A_PLUS": [82, 1],
-    "KNOB_3A_MINUS": [82, 127],
-
-    "KNOB_4A_PLUS": [83, 1],
-    "KNOB_4A_MINUS": [83, 127],
-
-    "KNOB_5A_PLUS": [84, 1],
-    "KNOB_5A_MINUS": [84, 127],
-
-    "KNOB_6A_PLUS": [85, 1],
-    "KNOB_6A_MINUS": [85, 127],
-
-    "KNOB_7A_PLUS": [86, 1],
-    "KNOB_7A_MINUS": [86, 127],
-
-    "KNOB_8A_PLUS": [87, 1],
-    "KNOB_8A_MINUS": [87, 127],
-
-    
-    "KNOB_1B_PLUS": [88, 1],
-    "KNOB_1B_MINUS": [88, 127],
-
-    "KNOB_2B_PLUS": [89, 1],
-    "KNOB_2B_MINUS": [89, 127],    
-
-    "KNOB_3B_PLUS": [90, 1],
-    "KNOB_3B_MINUS": [90, 127],
-
-    "KNOB_4B_PLUS": [91, 1],
-    "KNOB_4B_MINUS": [91, 127],
-
-    "KNOB_5B_PLUS": [92, 1],
-    "KNOB_5B_MINUS": [92, 127],
-
-    "KNOB_6B_PLUS": [93, 1],
-    "KNOB_6B_MINUS": [93, 127],
-
-    "KNOB_7B_PLUS": [94, 1],
-    "KNOB_7B_MINUS": [94, 127],
-
-    "KNOB_8B_PLUS": [95, 1],
-    "KNOB_8B_MINUS": [95, 127],
-}
-
 
 ###########################################################################################################################################
 # Test tools
@@ -202,11 +118,11 @@ def OnMidiIn(event):
 
         # 4D Encoder +
         if event.data1 == buttons.get("ENCODER_PLUS")[0] and event.data2 == buttons.get("ENCODER_PLUS")[1]:
-            print("ENCODER + pressed.")
+            print("ENCODER [+] pressed.")
 
         # 4D Encoder -
         if event.data1 == buttons.get("ENCODER_MINUS")[0] and event.data2 == buttons.get("ENCODER_MINUS")[1]:
-            print("ENCODER - pressed.")
+            print("ENCODER [-] pressed.")
         
         # 4D Encoder up
         if event.data1 == buttons.get("ENCODER_UP")[0] and event.data2 == buttons.get("ENCODER_UP")[1]:
@@ -377,6 +293,56 @@ buttons = {
 # Example:
 #   KNOB_1A --> First knob without shift. It is meant to adjust volume
 #   KNOB_1B --> First knob shifted (SHIFT button is being held down while using the knob). It is meant to adjust panning
+knobs = {
+    "KNOB_1A_PLUS": [80, 1],
+    "KNOB_1A_MINUS": [80, 127],
+
+    "KNOB_2A_PLUS": [81, 1],
+    "KNOB_2A_MINUS": [81, 127],
+
+    "KNOB_3A_PLUS": [82, 1],
+    "KNOB_3A_MINUS": [82, 127],
+
+    "KNOB_4A_PLUS": [83, 1],
+    "KNOB_4A_MINUS": [83, 127],
+
+    "KNOB_5A_PLUS": [84, 1],
+    "KNOB_5A_MINUS": [84, 127],
+
+    "KNOB_6A_PLUS": [85, 1],
+    "KNOB_6A_MINUS": [85, 127],
+
+    "KNOB_7A_PLUS": [86, 1],
+    "KNOB_7A_MINUS": [86, 127],
+
+    "KNOB_8A_PLUS": [87, 1],
+    "KNOB_8A_MINUS": [87, 127],
+
+    
+    "KNOB_1B_PLUS": [88, 1],
+    "KNOB_1B_MINUS": [88, 127],
+
+    "KNOB_2B_PLUS": [89, 1],
+    "KNOB_2B_MINUS": [89, 127],    
+
+    "KNOB_3B_PLUS": [90, 1],
+    "KNOB_3B_MINUS": [90, 127],
+
+    "KNOB_4B_PLUS": [91, 1],
+    "KNOB_4B_MINUS": [91, 127],
+
+    "KNOB_5B_PLUS": [92, 1],
+    "KNOB_5B_MINUS": [92, 127],
+
+    "KNOB_6B_PLUS": [93, 1],
+    "KNOB_6B_MINUS": [93, 127],
+
+    "KNOB_7B_PLUS": [94, 1],
+    "KNOB_7B_MINUS": [94, 127],
+
+    "KNOB_8B_PLUS": [95, 1],
+    "KNOB_8B_MINUS": [95, 127],
+}
 
 # Method to make talking to the device less annoying
 # All the messages the device is expecting have a structure of "BF XX XX"
