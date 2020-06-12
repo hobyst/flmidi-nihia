@@ -1,3 +1,5 @@
+#name= NIHIA Script
+
 # MIT License
 
 # Copyright (c) 2020 Hobyst
@@ -39,6 +41,207 @@ import playlist
 import midi
 import utils
 
+###########################################################################################################################################
+# Test tools
+###########################################################################################################################################
+
+class testMode_input():
+    global buttons
+    
+    def OnInit():
+        handShake()
+        print("Test mode enabled. Now each input you enter from the keyboard will reflect a message on how is it being recognised.")
+
+        # Play button
+        if event.data1 == buttons.get("PLAY"):
+            print("PLAY button pressed.")
+
+        # Restart button
+        if event.data1 == buttons.get("RESTART"):
+            print("RESTART button pressed.")
+
+        # Record button
+        if event.data1 == buttons.get("REC"):
+            print("REC button pressed.")
+        
+        # Count-In button
+        if event.data1 == buttons.get("COUNT_IN"):
+            print("COUNT_IN button pressed.")
+
+        # Stop button
+        if event.data1 == buttons.get("STOP"):
+            print("STOP button pressed.")
+
+        # Clear button
+        if event.data1 == buttons.get("CLEAR"):
+            print("CLEAR button pressed.")
+        
+        # Loop button
+        if event.data1 == buttons.get("LOOP"):
+            print("LOOP button pressed.")
+
+        # Metronome button
+        if event.data1 == buttons.get("METRO"):
+            print("METRO button pressed.")
+        
+        # Tempo button
+        if event.data1 == buttons.get("TEMPO"):
+            print("TEMPO button pressed.")
+
+        # Undo button
+        if event.data1 == buttons.get("UNDO"):
+            print("UNDO button pressed.")
+        
+        # Redo button
+        if event.data1 == buttons.get("REDO"):
+            print("REDO button pressed.")
+
+        # Quantize button
+        if event.data1 == buttons.get("QUANTIZE"):
+            print("QUANTIZE button pressed.")
+
+        # Automation button
+        if event.data1 == buttons.get("AUTO"):
+            print("AUTO button pressed.")
+
+        # Mute button
+        if event.data1 == buttons.get("MUTE"):
+            print("MUTE button pressed.")
+
+        # Solo button
+        if event.data1 == buttons.get("SOLO"):
+            print("SOLO button pressed.")
+
+        # 4D Encoder +
+        if event.data1 == buttons.get("ENCODER_PLUS")[0] and event.data2 == buttons.get("ENCODER_PLUS")[1]:
+            print("ENCODER + pressed.")
+
+        # 4D Encoder -
+        if event.data1 == buttons.get("ENCODER_MINUS")[0] and event.data2 == buttons.get("ENCODER_MINUS")[1]:
+            print("ENCODER - pressed.")
+        
+        # 4D Encoder up
+        if event.data1 == buttons.get("ENCODER_UP")[0] and event.data2 == buttons.get("ENCODER_UP")[1]:
+            print("ENCODER UP pressed.")
+        
+        # 4D Encoder down 
+        if event.data1 == buttons.get("ENCODER_DOWN")[0] and event.data2 == buttons.get("ENCODER_DOWN")[1]:
+            print("ENCODER DOWN pressed.")
+        
+        # 4D Encoder left
+        if event.data1 == buttons.get("ENCODER_LEFT")[0] and event.data2 == buttons.get("ENCODER_LEFT")[1]:
+            print("ENCODER LEFT pressed.")
+        
+        # 4D Encoder right
+        if event.data1 == buttons.get("ENCODER_RIGHT")[0] and event.data2 == buttons.get("ENCODER_RIGHT")[1]:
+            print("ENCODER RIGHT pressed.")
+
+        # 4D Encoder button
+        if event.data1 == buttons.get("ENCODER_BUTTON"):
+            print("ENCODER BUTTON pressed.")
+
+
+        # Knobs
+        if event.data1 == buttons.get("KNOB_1A_PLUS")[0] and event.data2 == buttons.get("KNOB_1A_PLUS")[1]:
+            print("KNOB 1 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_1A_MINUS")[0] and event.data2 == buttons.get("KNOB_1A_MINUS")[1]:
+            print("KNOB 1 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_2A_PLUS")[0] and event.data2 == buttons.get("KNOB_2A_PLUS")[1]:
+            print("KNOB 2 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_2A_MINUS")[0] and event.data2 == buttons.get("KNOB_2A_MINUS")[1]:
+            print("KNOB 2 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_3A_PLUS")[0] and event.data2 == buttons.get("KNOB_3A_PLUS")[1]:
+            print("KNOB 3 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_3A_MINUS")[0] and event.data2 == buttons.get("KNOB_3A_MINUS")[1]:
+            print("KNOB 3 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_4A_PLUS")[0] and event.data2 == buttons.get("KNOB_4A_PLUS")[1]:
+            print("KNOB 4 [+] pressed.")
+        
+        if event.data1 == buttons.get("KNOB_4A_MINUS")[0] and event.data2 == buttons.get("KNOB_4A_MINUS")[1]:
+            print("KNOB 4 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_5A_PLUS")[0] and event.data2 == buttons.get("KNOB_5A_PLUS")[1]:
+            print("KNOB 5 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_5A_MINUS")[0] and event.data2 == buttons.get("KNOB_5A_MINUS")[1]:
+            print("KNOB 5 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_6A_PLUS")[0] and event.data2 == buttons.get("KNOB_6A_PLUS")[1]:
+            print("KNOB 6 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_6A_MINUS")[0] and event.data2 == buttons.get("KNOB_6A_MINUS")[1]:
+            print("KNOB 6 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_7A_PLUS")[0] and event.data2 == buttons.get("KNOB_7A_PLUS")[1]:
+            print("KNOB 7 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_7A_MINUS")[0] and event.data2 == buttons.get("KNOB_7A_MINUS")[1]:
+            print("KNOB 7 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_8A_PLUS")[0] and event.data2 == buttons.get("KNOB_8A_PLUS")[1]:
+            print("KNOB 8 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_8A_MINUS")[0] and event.data2 == buttons.get("KNOB_8A_MINUS")[1]:
+            print("KNOB 8 [-] pressed.")
+        
+
+        
+        if event.data1 == buttons.get("KNOB_1B_PLUS")[0] and event.data2 == buttons.get("KNOB_1B_PLUS")[1]:
+            print("SHIFT + KNOB 1 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_1B_MINUS")[0] and event.data2 == buttons.get("KNOB_1B_MINUS")[1]:
+            print("SHIFT + KNOB 1 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_2B_PLUS")[0] and event.data2 == buttons.get("KNOB_2B_PLUS")[1]:
+            print("SHIFT + KNOB 2 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_2B_MINUS")[0] and event.data2 == buttons.get("KNOB_2B_MINUS")[1]:
+            print("SHIFT + KNOB 2 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_3B_PLUS")[0] and event.data2 == buttons.get("KNOB_3B_PLUS")[1]:
+            print("SHIFT + KNOB 3 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_3B_MINUS")[0] and event.data2 == buttons.get("KNOB_3B_MINUS")[1]:
+            print("SHIFT + KNOB 3 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_4B_PLUS")[0] and event.data2 == buttons.get("KNOB_4B_PLUS")[1]:
+            print("SHIFT + KNOB 4 [+] pressed.")
+        
+        if event.data1 == buttons.get("KNOB_4B_MINUS")[0] and event.data2 == buttons.get("KNOB_4B_MINUS")[1]:
+            print("SHIFT + KNOB 4 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_5B_PLUS")[0] and event.data2 == buttons.get("KNOB_5B_PLUS")[1]:
+            print("SHIFT + KNOB 5 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_5B_MINUS")[0] and event.data2 == buttons.get("KNOB_5B_MINUS")[1]:
+            print("SHIFT + KNOB 5 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_6B_PLUS")[0] and event.data2 == buttons.get("KNOB_6B_PLUS")[1]:
+            print("SHIFT + KNOB 6 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_6B_MINUS")[0] and event.data2 == buttons.get("KNOB_6B_MINUS")[1]:
+            print("SHIFT + KNOB 6 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_7B_PLUS")[0] and event.data2 == buttons.get("KNOB_7B_PLUS")[1]:
+            print("SHIFT + KNOB 7 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_7B_MINUS")[0] and event.data2 == buttons.get("KNOB_7B_MINUS")[1]:
+            print("SHIFT + KNOB 7 [-] pressed.")
+
+        if event.data1 == buttons.get("KNOB_8B_PLUS")[0] and event.data2 == buttons.get("KNOB_8B_PLUS")[1]:
+            print("SHIFT + KNOB 8 [+] pressed.")
+
+        if event.data1 == buttons.get("KNOB_8B_MINUS")[0] and event.data2 == buttons.get("KNOB_8B_MINUS")[1]:
+            print("SHIFT + KNOB 8 [-] pressed.")
+
+###########################################################################################################################################
+
 
 # Button name to button ID dictionary
 # The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
@@ -76,6 +279,63 @@ buttons = {
     "ENCODER_MINUS": [52, 127]
 }
 
+
+# Knob to knob ID dictionary
+# The number in the name of the knob refers to the physical knob in the device from left to right
+# The letter at the end represents whether the knob is being shifted or not
+# Example:
+#   KNOB_1A --> First knob without shift. It is meant to adjust volume
+#   KNOB_1B --> First knob shifted (SHIFT button is being held down while using the knob). It is meant to adjust panning
+knobs = {
+    "KNOB_1A_PLUS": [80, 1],
+    "KNOB_1A_MINUS": [80, 127],
+
+    "KNOB_2A_PLUS": [81, 1],
+    "KNOB_2A_MINUS": [81, 127],
+
+    "KNOB_3A_PLUS": [82, 1],
+    "KNOB_3A_MINUS": [82, 127],
+
+    "KNOB_4A_PLUS": [83, 1],
+    "KNOB_4A_MINUS": [83, 127],
+
+    "KNOB_5A_PLUS": [84, 1],
+    "KNOB_5A_MINUS": [84, 127],
+
+    "KNOB_6A_PLUS": [85, 1],
+    "KNOB_6A_MINUS": [85, 127],
+
+    "KNOB_7A_PLUS": [86, 1],
+    "KNOB_7A_MINUS": [86, 127],
+
+    "KNOB_8A_PLUS": [87, 1],
+    "KNOB_8A_MINUS": [87, 127],
+
+    
+    "KNOB_1B_PLUS": [88, 1],
+    "KNOB_1B_MINUS": [88, 127],
+
+    "KNOB_2B_PLUS": [89, 1],
+    "KNOB_2B_MINUS": [89, 127],    
+
+    "KNOB_3B_PLUS": [90, 1],
+    "KNOB_3B_MINUS": [90, 127],
+
+    "KNOB_4B_PLUS": [91, 1],
+    "KNOB_4B_MINUS": [91, 127],
+
+    "KNOB_5B_PLUS": [92, 1],
+    "KNOB_5B_MINUS": [92, 127],
+
+    "KNOB_6B_PLUS": [93, 1],
+    "KNOB_6B_MINUS": [93, 127],
+
+    "KNOB_7B_PLUS": [94, 1],
+    "KNOB_7B_MINUS": [94, 127],
+
+    "KNOB_8B_PLUS": [95, 1],
+    "KNOB_8B_MINUS": [95, 127],
+}
 
 # Method to make talking to the device less annoying
 # All the messages the device is expecting have a structure of "BF XX XX"
@@ -161,6 +421,7 @@ mixerinfo_types = {
     "EXIST": 64,
     "SELECTED": 66,
 }
+
 
 
 # Method for reporting information about the mixer tracks, which is done through Sysex
