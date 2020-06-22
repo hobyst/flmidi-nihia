@@ -1,4 +1,4 @@
-# name=NIHIA Script
+# name=NIHIA Script (testing)
 # url= 
 
 # MIT License
@@ -396,11 +396,12 @@ def restartProtocol():
 def buttonSetLight(buttonName: str, lightMode: int):
     """ Method for controlling the lights on the buttons of the device. 
     
-    buttonName -- Name of the button as shown in the device in caps and enclosed in quotes. ("PLAY", "AUTO", "REDO"...)
+    ### Parameters
 
-    EXCEPTION: declare the Count-In button as COUNT_IN
+     - buttonName: Name of the button as shown in the device in caps and enclosed in quotes. ("PLAY", "AUTO", "REDO"...)
+        - EXCEPTION: declare the Count-In button as COUNT_IN
     
-    lightMode -- If set to 0, sets the first light mode of the button. If set to 1, sets the second light mode."""
+     - lightMode: If set to 0, sets the first light mode of the button. If set to 1, sets the second light mode."""
 
     #Light mode integer to light mode hex dictionary
     lightModes = {
@@ -436,17 +437,19 @@ mixerinfo_types = {
 def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     """ Sends info about the mixer tracks to the device.
     
-    info_type -- The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on nihia.mixerinfo_types
-    
-    trackID -- From 0 to 7. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
+    ### Parameters
 
-    Third agument depends on what kind of information you are going to send:
-
-    value (integer) -- Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
+     - info_type: The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on nihia.mixerinfo_types
     
+     - trackID: From 0 to 7. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
+
+    The third (and last) agument depends on what kind of information you are going to send:
+
+     - value (integer): Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
+
     or
 
-    info (string) -- Used for track name, track pan and track volume.
+     - info (string): Used for track name, track pan and track volume.
     """
 
     # Gets the inputed values for the optional arguments from **kwargs
