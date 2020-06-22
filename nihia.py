@@ -428,45 +428,65 @@ mixerinfo_types = {
     # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
     "EXIST": 64,
     "SELECTED": 66,
+
+    # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
+    "PEAK": 73
 }
 
 
-
-# Method for reporting information about the mixer tracks, which is done through Sysex
+# Method for reporting information about the mixer tracks, which is done through SysEx
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
 def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     """ Sends info about the mixer tracks to the device.
     
     ### Parameters
 
-     - info_type: The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on nihia.mixerinfo_types
+     - info_type: The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on `nihia.mixerinfo_types`
     
      - trackID: From 0 to 7. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
 
-    The third (and last) agument depends on what kind of information you are going to send:
+    The third (and last) argument depends on what kind of information you are going to send:
 
      - value (integer): Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
 
     or
 
-     - info (string): Used for track name, track pan and track volume.
+     - info: Used for track name, track pan, track volume and peak values.
+        - For peak values: Report them as `info=[LEFT_PEAK, RIGHT_PEAK]`. They can be neither integers or floats, and they will get reformated automatically.
+        - For everything else: Report the info as `info=TEXT_STRING`.
     """
 
     # Gets the inputed values for the optional arguments from **kwargs
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
 
-    # Defines the behaviour for when additional info is reported (for track name, track pan and track volume)
+    # Defines the behaviour for when additional info is reported (for track name, track pan, track volume and peak values)
     if info != None:
 
-        # Tells Python that the additional_info argument is in UTF-8
-        info = info.encode("UTF-8")
+        # Bifurcation of behaviour to stablish the different treatment(s) that certain type of data has to recieve before being sent to the device
+        
+        # For string-based data
+        if (info_type is "VOLUME" or "PAN" or "NAME"):
+            # Tells Python that the additional_info argument is in UTF-8
+            info = info.encode("UTF-8")
+
+            # Converts the text string to a list of Unicode values
+            info = list(bytes(info))
+        
+        # For peak values
+        # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
+        # in case peak values are specified
+        if info_type == "PEAK":
+            info[0] = round(info[0])    # Left peak
+            info[1] = round(info[1])    # Right peak
+        
         
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + list(bytes(info)) + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + info + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
+
 
     # Defines how the method should work normally
     else:
