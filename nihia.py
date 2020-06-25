@@ -452,7 +452,8 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     or
 
      - info: Used for track name, track pan, track volume and peak values.
-        - For peak values: Report them as `info=[LEFT_PEAK, RIGHT_PEAK]`. They can be neither integers or floats, and they will get reformated automatically.
+        - For peak values: Report them as `info=[LEFT_PEAK, RIGHT_PEAK]`. They can be neither integers or floats, and they will get reformated automatically. You can
+        also use the `mixer.getTrackPeaks` function directly to fill the argument, but remember you have to specify the left and the right channel separately.
         - For everything else: Report the info as `info=TEXT_STRING`.
     """
 
@@ -465,28 +466,41 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
         # Bifurcation of behaviour to stablish the different treatment(s) that certain type of data has to recieve before being sent to the device
         
+        # For peak values
+        # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
+        # in case peak values are specified
+        if info_type == "PEAK":
+            
+            # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
+            if info[0] >= 1.1:
+                info[0] = 1.1
+            
+            if info[1] >= 1.1:
+                info[1] = 1.1
+            
+            # Translates the 0-1.1 range to 0-127 range
+            info[0] = info[0] * (127 / 1.1)
+            info[1] = info[1] * (127 / 1.1)
+            
+            # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
+            info[0] = round(info[0])    # Left peak
+            info[1] = round(info[1])    # Right peak
+            
+
+        
         # For string-based data
-        if (info_type is "VOLUME" or "PAN" or "NAME"):
+        else:
             # Tells Python that the additional_info argument is in UTF-8
             info = info.encode("UTF-8")
 
             # Converts the text string to a list of Unicode values
             info = list(bytes(info))
         
-        # For peak values
-        # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
-        # in case peak values are specified
-        if info_type == "PEAK":
-            info[0] = round(info[0])    # Left peak
-            info[1] = round(info[1])    # Right peak
-        
-        
         # Conforms the kind of message midiOutSysex is waiting for
         msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + info + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
-
 
     # Defines how the method should work normally
     else:
