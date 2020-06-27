@@ -272,10 +272,11 @@ buttons = {
     "MUTE": 67,
     "SOLO": 68,
 
+    "ENCODER_BUTTON": 96,
+    "ENCODER_BUTTON_SHIFTED": 97,
+    
     # The 4D encoder events use the same data1, but different data2
     # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
-    "ENCODER_BUTTON": 96,
-    
     "ENCODER_RIGHT": [50, 1],
     "ENCODER_LEFT": [50, 127],
     
@@ -487,9 +488,8 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
             info[1] = round(info[1])    # Right peak
             
 
-        
         # For string-based data
-        else:
+        elif info_type != "PEAK":
             # Tells Python that the additional_info argument is in UTF-8
             info = info.encode("UTF-8")
 
