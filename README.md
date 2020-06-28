@@ -7,11 +7,14 @@ The simplest way to incorporate the layer to your project would be to download t
 However, if you are using Git and you want to be able to update and manage the layer in a way that you don't have to manually visit the GitHub page to see if there's any update, download it manually and do all the copy-paste each time you need to, you can integrate the layer as a module inside your repo. **Note:** This will mean that `git clone [your repo]` won't work as it will only retrieve your files, but not the nihia submodule. Below it is explained which command should be used by your end user in order to always get all of the components of your repo.
 ### Adding flmidi-nihia as a submodule inside your Git repo
 ```bash
-# Adds nihia as a submodule inside your git repository under the folder "nihia"
+# Adds nihia as a submodule inside your git repository under the folder "nihia" (latest stable version, contained in master branch)
 git submodule add https://github.com/hobyst/flmidi-nihia.git nihia
 
 # If you want the latest (might be unstable) version of the layer, you can clone the "dev" branch as a submodule:
 git submodule add -b dev https://github.com/hobyst/flmidi-nihia.git nihia
+
+# Retrieves a certain version of the layer rather than the latest one
+git submodule add -b "v1" --single-branch https://github.com/hobyst/flmidi-nihia.git nihia
 ```
 
 Then, import it inside your `device_` script, using:
