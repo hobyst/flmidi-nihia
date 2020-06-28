@@ -42,5 +42,5 @@ As said before, if you integrated flmidi-nihia as a submodule inside your reposi
 git clone [your repo] --recurse-submodules
 ```
 
-#### References
+###### References
  - [DrivenByMoss by Jürgen Moßgraber](https://github.com/git-moss/DrivenByMoss)
