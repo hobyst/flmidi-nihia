@@ -4,7 +4,7 @@ Abstraction layer of the Native Instruments' Host Integration Agent API for the 
 ## Incorporating the layer to your script and managing it
 The simplest way to incorporate the layer to your project would be to download the source code file from the [releases page](https://github.com/hobyst/flmidi-nihia/releases) and then drop the `nihia.py` file inside the same folder your `device_` script is located.
 
-However, if you are using Git and you want to be able to update and manage the layer in a way that you don't have to manually visit the GitHub page to see if there's any update, then download it manually and do all the copy-paste each time you need to, you can integrate the layer as a module inside your repo. **Note:** This will mean that `git clone [your repo]` won't work as it will only retrieve your files, but not the nihia submodule. Below it is explained which command should be used by your end user in order to always get all of the components of your repo.
+However, if you are using Git and you want to be able to update and manage the layer in a way that you don't have to manually visit the GitHub page to see if there's any update, download it manually and do all the copy-paste each time you need to, you can integrate the layer as a module inside your repo. **Note:** This will mean that `git clone [your repo]` won't work as it will only retrieve your files, but not the nihia submodule. Below it is explained which command should be used by your end user in order to always get all of the components of your repo.
 ### Adding flmidi-nihia as a submodule inside your Git repo
 ```bash
 # Adds nihia as a submodule inside your git repository under the folder "nihia"
