@@ -33,7 +33,7 @@ git submodule update --remote --merge
 # If you have several submodules and you just want to update nihia, this will do so
 git submodule update --remote --merge nihia
 ```
-This will also update the commit of `flmidi-nihia` your repository was refering to, and so any end user that clones your repo after you have run the command and pulled back your latest local commit to your remote repository will get the same version you updated to, avoiding version hell and making the version that you, both developer and end user have to always be the same no matter what I (as the developer of the layer) do.
+This will also update the commit of `flmidi-nihia` your repository was refering to, so any end user that clones your repo after you have run the command and pulled back your latest local commit to your remote repository will get the same version you updated to, avoiding version hell and making the version that you, both developer and end user have to always be the same no matter what I (as the developer of the layer) do.
 
 ## Cloning your repository including the layer
 As said before, if you integrated flmidi-nihia as a submodule inside your repository, your end user won't get all of the necessary files in order to run the script because Git won't clone the submodule with just `git clone`. But a simple argument in the command will clone everything, solving this problem:
