@@ -462,7 +462,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
             
 
         # For string-based data
-        elif info_type != "PEAK":
+        if (info_type is "NAME") or (info_type is "VOLUME") or (info_type is "PAN"):
             # Tells Python that the additional_info argument is in UTF-8
             info = info.encode("UTF-8")
 
