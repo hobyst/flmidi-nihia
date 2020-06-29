@@ -296,7 +296,7 @@ buttons = {
 #   KNOB_1B --> First knob shifted (SHIFT button is being held down while using the knob). It is meant to adjust panning
 knobs = {
     "KNOB_1A": 80,
-    "KNOB_2A_": 81,
+    "KNOB_2A": 81,
     "KNOB_3A": 82,
     "KNOB_4A": 83,
     "KNOB_5A": 84,
