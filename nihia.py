@@ -403,8 +403,6 @@ mixerinfo_types = {
     "EXIST": 64,
     "SELECTED": 66,
 
-    # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
-    "PEAK": 73
 }
 
 
