@@ -146,102 +146,102 @@ def OnMidiIn(event):
 
 
         # Knobs
-        if event.data1 == knobs.get("KNOB_1A_PLUS")[0] and event.data2 == knobs.get("KNOB_1A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 1 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_1A_MINUS")[0] and event.data2 == knobs.get("KNOB_1A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 1 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_2A_PLUS")[0] and event.data2 == knobs.get("KNOB_2A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_2A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 2 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_2A_MINUS")[0] and event.data2 == knobs.get("KNOB_2A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_2A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 2 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_3A_PLUS")[0] and event.data2 == knobs.get("KNOB_3A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_3A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 3 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_3A_MINUS")[0] and event.data2 == knobs.get("KNOB_3A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_3A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 3 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_4A_PLUS")[0] and event.data2 == knobs.get("KNOB_4A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_4A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 4 [+] pressed.")
         
-        if event.data1 == knobs.get("KNOB_4A_MINUS")[0] and event.data2 == knobs.get("KNOB_4A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_4A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 4 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_5A_PLUS")[0] and event.data2 == knobs.get("KNOB_5A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_5A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 5 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_5A_MINUS")[0] and event.data2 == knobs.get("KNOB_5A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_5A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 5 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_6A_PLUS")[0] and event.data2 == knobs.get("KNOB_6A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_6A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 6 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_6A_MINUS")[0] and event.data2 == knobs.get("KNOB_6A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_6A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 6 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_7A_PLUS")[0] and event.data2 == knobs.get("KNOB_7A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_7A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 7 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_7A_MINUS")[0] and event.data2 == knobs.get("KNOB_7A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_7A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 7 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_8A_PLUS")[0] and event.data2 == knobs.get("KNOB_8A_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_8A") and event.data2 == knobs.get("INCREASE"):
             print("KNOB 8 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_8A_MINUS")[0] and event.data2 == knobs.get("KNOB_8A_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_8A") and event.data2 == knobs.get("DECREASE"):
             print("KNOB 8 [-] pressed.")
         
 
         
-        if event.data1 == knobs.get("KNOB_1B_PLUS")[0] and event.data2 == knobs.get("KNOB_1B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_1B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 1 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_1B_MINUS")[0] and event.data2 == knobs.get("KNOB_1B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_1B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 1 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_2B_PLUS")[0] and event.data2 == knobs.get("KNOB_2B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_2B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 2 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_2B_MINUS")[0] and event.data2 == knobs.get("KNOB_2B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_2B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 2 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_3B_PLUS")[0] and event.data2 == knobs.get("KNOB_3B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_3B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 3 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_3B_MINUS")[0] and event.data2 == knobs.get("KNOB_3B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_3B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 3 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_4B_PLUS")[0] and event.data2 == knobs.get("KNOB_4B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_4B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 4 [+] pressed.")
         
-        if event.data1 == knobs.get("KNOB_4B_MINUS")[0] and event.data2 == knobs.get("KNOB_4B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_4B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 4 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_5B_PLUS")[0] and event.data2 == knobs.get("KNOB_5B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_5B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 5 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_5B_MINUS")[0] and event.data2 == knobs.get("KNOB_5B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_5B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 5 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_6B_PLUS")[0] and event.data2 == knobs.get("KNOB_6B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_6B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 6 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_6B_MINUS")[0] and event.data2 == knobs.get("KNOB_6B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_6B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 6 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_7B_PLUS")[0] and event.data2 == knobs.get("KNOB_7B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_7B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 7 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_7B_MINUS")[0] and event.data2 == knobs.get("KNOB_7B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_7B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 7 [-] pressed.")
 
-        if event.data1 == knobs.get("KNOB_8B_PLUS")[0] and event.data2 == knobs.get("KNOB_8B_PLUS")[1]:
+        if event.data1 == knobs.get("KNOB_8B") and event.data2 == knobs.get("INCREASE"):
             print("SHIFT + KNOB 8 [+] pressed.")
 
-        if event.data1 == knobs.get("KNOB_8B_MINUS")[0] and event.data2 == knobs.get("KNOB_8B_MINUS")[1]:
+        if event.data1 == knobs.get("KNOB_8B") and event.data2 == knobs.get("DECREASE"):
             print("SHIFT + KNOB 8 [-] pressed.")
 
 
