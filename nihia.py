@@ -147,9 +147,11 @@ def OnMidiIn(event):
 
         # Knobs
         if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("INCREASE"):
+            event.handled = True
             print("KNOB 1 [+] pressed.")
 
         if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("DECREASE"):
+            event.handled = True
             print("KNOB 1 [-] pressed.")
 
         if event.data1 == knobs.get("KNOB_2A") and event.data2 == knobs.get("INCREASE"):
@@ -313,8 +315,8 @@ knobs = {
     "KNOB_7B": 94,
     "KNOB_8B": 95,
 
-    "INCREASE": 1,
-    "DECREASE": 127
+    "INCREASE": 63,
+    "DECREASE": 65
 
 }
 
