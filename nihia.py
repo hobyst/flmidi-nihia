@@ -338,7 +338,7 @@ def handShake():
     was successful and returns True if affirmative."""
 
     # Sends the MIDI message that initiates the handshake: BF 01 01
-    dataOut(1, 1)
+    dataOut(1, 3)
 
     # TODO: Waits and reads the handshake confirmation message
    
