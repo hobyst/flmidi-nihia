@@ -271,8 +271,8 @@ buttons = {
     "QUANTIZE": 34,
     "AUTO": 35,
 
-    "MUTE": 67,
-    "SOLO": 68,
+    "MUTE": 103,
+    "SOLO": 104,
 
     "ENCODER_BUTTON": 96,
     "ENCODER_BUTTON_SHIFTED": 97,
