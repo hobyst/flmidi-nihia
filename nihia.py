@@ -406,9 +406,24 @@ mixerinfo_types = {
     "SELECTED": 66,
 
     # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
-    "PEAK": 73
+    "PEAK": 73,
+
+    # Serves to tell the device if there's a Komplete Kontrol instance added in a certain track or not
+    # In case there's one, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="NIKBxx")
+    # In case there's none, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="")
+    # NIKBxx is the name of the first automation parameter of the Komplete Kontrol plugin
+    "KOMPLETE_INSTANCE": 65
 }
 
+track_types = {
+    "EMPTY": 0,
+    "GENERIC": 1,
+    "MIDI": 2,
+    "AUDIO": 3,
+    "GROUP": 4,
+    "RETURN_BUS": 5,
+    "MASTER": 6
+}
 
 # Method for reporting information about the mixer tracks, which is done through SysEx
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
@@ -417,13 +432,14 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     
     ### Parameters
 
-     - info_type: The kind of information you're going to send. ("VOLUME", "PAN"...) Defined on `nihia.mixerinfo_types`
+     - info_type: The kind of information you're going to send as defined on `mixerinfo_types`. ("VOLUME", "PAN"...)
+         - Note: If declared as `"EXIST"`, you can also declare the track type on the `value` argument as a string (values are contained in `track_types` dictionary).
     
      - trackID: From 0 to 7. Tells the device which track from the ones that are showing up in the screen you're going to tell info about.
 
     The third (and last) argument depends on what kind of information you are going to send:
 
-     - value (integer): Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not.
+     - value (integer): Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not (except `"EXIST"`).
 
     or
 
@@ -436,6 +452,12 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     # Gets the inputed values for the optional arguments from **kwargs
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
+
+    # Compatibility behaviour for older implementations of the layer before the addition of track_types
+    # This will retrieve the correct value in case the developer used the string based declaration
+    if type(value) == str:
+        value = track_types.get(value, 0)
+
 
     # Defines the behaviour for when additional info is reported (for track name, track pan, track volume and peak values)
     if info != None:
