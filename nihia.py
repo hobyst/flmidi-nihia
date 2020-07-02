@@ -501,12 +501,10 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
      - value (integer): Can be 0 (no) or 1 (yes). Used for two-state properties like to tell if the track is solo-ed or not (except `"EXIST"`).
 
-    or
+     - info: Used for track name, track pan, track volume and the Komplete Kontrol instance ID.
 
-     - info: Used for track name, track pan, track volume and peak values.
-        - For peak values: Report them as `info=[LEFT_PEAK, RIGHT_PEAK]`. They can be neither integers or floats, and they will get reformated automatically. You can
-        also use the `mixer.getTrackPeaks` function directly to fill the argument, but remember you have to specify the left and the right channel separately.
-        - For everything else: Report the info as `info=TEXT_STRING`.
+     - peakL and peakR: For peak values. They can be neither integers or floats, and they will get reformated automatically. You can
+    also use the `mixer.getTrackPeaks` function directly to fill the argument, but remember you have to specify the left and the right channel separately.
     """
 
     # Gets the inputed values for the optional arguments from **kwargs
