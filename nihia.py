@@ -260,22 +260,9 @@ def OnDeInit():
 ###########################################################################################################################################
 
 
-# Sets the 4D Encoder axis to the right one depending on the device
-if device_series == "A_SERIES" or "M_SERIES":
-    buttons["ENCODER_RIGHT"][0] = 50
-    buttons["ENCODER_LEFT"][0] = 50
-
-    buttons["ENCODER_UP"][0] = 48
-    buttons["ENCODER_DOWN"][0] = 48
-
-if device_series == "S_SERIES":
-    buttons["ENCODER_RIGHT"][0] = 48
-    buttons["ENCODER_LEFT"][0] = 48
-
-    buttons["ENCODER_UP"][0] = 50
-    buttons["ENCODER_DOWN"][0] = 50
-
-
+###########################################################################################################################################
+# Dictionaries
+###########################################################################################################################################
 
 # Button name to button ID dictionary
 # The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
@@ -316,7 +303,6 @@ buttons = {
     "ENCODER_MINUS": [52, 127]
 }
 
-
 # Knob to knob ID dictionary
 # The number in the name of the knob refers to the physical knob in the device from left to right
 # The letter at the end represents whether the knob is being shifted or not
@@ -344,8 +330,68 @@ knobs = {
 
     "INCREASE": 63,
     "DECREASE": 65
-
 }
+
+# Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
+# and their corresponding identificative bytes
+mixerinfo_types = {
+    "VOLUME": 70,
+    "PAN": 71,
+    "IS_MUTE": 67,
+    "IS_SOLO": 68,
+    "NAME": 72,
+    
+    # This one makes more sense on DAWs that create more tracks as the user requests it, as there might be projects (for example) on Ableton Live
+    # with only two tracks
+    # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
+    # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
+    "EXIST": 64,
+    "SELECTED": 66,
+
+    # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
+    "PEAK": 73,
+
+    # Serves to tell the device if there's a Komplete Kontrol instance added in a certain track or not
+    # In case there's one, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="NIKBxx")
+    # In case there's none, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="")
+    # NIKBxx is the name of the first automation parameter of the Komplete Kontrol plugin
+    "KOMPLETE_INSTANCE": 65
+}
+
+# Track types dictionary
+# Used when reporting existance of tracks
+track_types = {
+    "EMPTY": 0,
+    "GENERIC": 1,
+    "MIDI": 2,
+    "AUDIO": 3,
+    "GROUP": 4,
+    "RETURN_BUS": 5,
+    "MASTER": 6
+}
+
+
+# Sets the 4D Encoder axis to the right one depending on the device
+if device_series == "A_SERIES" or "M_SERIES":
+    buttons["ENCODER_RIGHT"][0] = 50
+    buttons["ENCODER_LEFT"][0] = 50
+
+    buttons["ENCODER_UP"][0] = 48
+    buttons["ENCODER_DOWN"][0] = 48
+
+if device_series == "S_SERIES":
+    buttons["ENCODER_RIGHT"][0] = 48
+    buttons["ENCODER_LEFT"][0] = 48
+
+    buttons["ENCODER_UP"][0] = 50
+    buttons["ENCODER_DOWN"][0] = 50
+
+
+
+
+
+
+
 
 # Method to make talking to the device less annoying
 # All the messages the device is expecting have a structure of "BF XX XX"
@@ -416,41 +462,8 @@ def buttonSetLight(buttonName: str, lightMode: int):
     dataOut(buttons.get(buttonName), lightModes.get(lightMode))
 
 
-# Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
-# and their corresponding identificative bytes
-mixerinfo_types = {
-    "VOLUME": 70,
-    "PAN": 71,
-    "IS_MUTE": 67,
-    "IS_SOLO": 68,
-    "NAME": 72,
-    
-    # This one makes more sense on DAWs that create more tracks as the user requests it, as there might be projects (for example) on Ableton Live
-    # with only two tracks
-    # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
-    # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
-    "EXIST": 64,
-    "SELECTED": 66,
 
-    # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
-    "PEAK": 73,
 
-    # Serves to tell the device if there's a Komplete Kontrol instance added in a certain track or not
-    # In case there's one, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="NIKBxx")
-    # In case there's none, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="")
-    # NIKBxx is the name of the first automation parameter of the Komplete Kontrol plugin
-    "KOMPLETE_INSTANCE": 65
-}
-
-track_types = {
-    "EMPTY": 0,
-    "GENERIC": 1,
-    "MIDI": 2,
-    "AUDIO": 3,
-    "GROUP": 4,
-    "RETURN_BUS": 5,
-    "MASTER": 6
-}
 
 # Method for reporting information about the mixer tracks, which is done through SysEx
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
