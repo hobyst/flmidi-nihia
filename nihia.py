@@ -562,7 +562,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
         peakR = round(peakR)    # Right peak
 
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + [peakL] + [peakR] + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), 2, trackID] + [peakL] + [peakR] + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
