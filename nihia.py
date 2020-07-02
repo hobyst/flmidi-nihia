@@ -42,6 +42,14 @@ import playlist
 import midi
 import utils
 
+###########################################################################################################################################
+# Editable variables
+###########################################################################################################################################
+
+# Adjusts behaviour depending on which device is talking to
+# If set to "S_SERIES" it will adapt for S-Series devices
+# If set to "A_SERIES" OR "M_SERIES" it will adapt for A-Series and M-Series devices
+device_series=""
 
 ###########################################################################################################################################
 # Test tools
@@ -252,6 +260,23 @@ def OnDeInit():
 ###########################################################################################################################################
 
 
+# Sets the 4D Encoder axis to the right one depending on the device
+if device_series == "A_SERIES" or "M_SERIES":
+    buttons["ENCODER_RIGHT"][0] = 50
+    buttons["ENCODER_LEFT"][0] = 50
+
+    buttons["ENCODER_UP"][0] = 48
+    buttons["ENCODER_DOWN"][0] = 48
+
+if device_series == "S_SERIES":
+    buttons["ENCODER_RIGHT"][0] = 48
+    buttons["ENCODER_LEFT"][0] = 48
+
+    buttons["ENCODER_UP"][0] = 50
+    buttons["ENCODER_DOWN"][0] = 50
+
+
+
 # Button name to button ID dictionary
 # The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
 # sent or recieved from the device
@@ -279,6 +304,8 @@ buttons = {
     
     # The 4D encoder events use the same data1, but different data2
     # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
+    # 
+    # data1 values are inverted for the axis of the 4D Encoder between A/M devices and S devices
     "ENCODER_RIGHT": [50, 1],
     "ENCODER_LEFT": [50, 127],
     
