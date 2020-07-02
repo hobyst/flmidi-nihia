@@ -49,16 +49,51 @@ import utils
 # Adjusts behaviour depending on which device is talking to
 # If set to "S_SERIES" it will adapt for S-Series devices
 # If set to "A_SERIES" OR "M_SERIES" it will adapt for A-Series and M-Series devices
-device_series=""
+DEVICE_SERIES = "A_SERIES"
 
 ###########################################################################################################################################
 # Test tools
 ###########################################################################################################################################
 
 test = ""
+
+def encoderHandler(axis: str) -> int:
+    """ Allows to handle the inversion of axis of the 4D Encoder that happens between A/M-Series devices and S-Series devices, by 
+    returning the right MIDI value FL Studio has to check for.
+    ### Parameters
+     - axis: The axis you want to get the value for.
+    """
+    devices = {
+        "A_SERIES": 1,
+        "M_SERIES": 1,
+        "S_SERIES": 2
+    }
+
+    device = devices.get(DEVICE_SERIES)
+
+    # Device check
+    if device == 1:
+        # X axis
+        if axis == "X":
+           return buttons.get("ENCODER_X_A")
+        
+        # Y axis
+        if axis == "Y":
+           return buttons.get("ENCODER_Y_A")
+
+    if device == 2:
+        # X axis
+        if axis == "X":
+           return buttons.get("ENCODER_X_S")
+        
+        # Y axis
+        if axis == "Y":
+           return buttons.get("ENCODER_Y_S")
     
 def OnInit():
         handShake()
+
+        print("Set DEVICE_SERIES to the kind of device you are using in order to avoid problems with the 4D Encoder.")
 
 
 def OnMidiIn(event):
@@ -125,27 +160,27 @@ def OnMidiIn(event):
             print("SOLO button pressed.")
 
         # 4D Encoder +
-        if event.data1 == buttons.get("ENCODER_PLUS")[0] and event.data2 == buttons.get("ENCODER_PLUS")[1]:
+        if event.data1 == buttons.get("ENCODER_PLUS") and event.data2 == buttons.get("ENCODER_PLUS")[1]:
             print("ENCODER [+] pressed.")
 
         # 4D Encoder -
-        if event.data1 == buttons.get("ENCODER_MINUS")[0] and event.data2 == buttons.get("ENCODER_MINUS")[1]:
+        if event.data1 == buttons.get("ENCODER_MINUS") and event.data2 == buttons.get("ENCODER_MINUS")[1]:
             print("ENCODER [-] pressed.")
         
         # 4D Encoder up
-        if event.data1 == buttons.get("ENCODER_UP")[0] and event.data2 == buttons.get("ENCODER_UP")[1]:
+        if event.data1 == encoderHandler("Y") and event.data2 == buttons.get("UP"):
             print("ENCODER UP pressed.")
         
         # 4D Encoder down 
-        if event.data1 == buttons.get("ENCODER_DOWN")[0] and event.data2 == buttons.get("ENCODER_DOWN")[1]:
+        if event.data1 == encoderHandler("Y") and event.data2 == buttons.get("DOWN"):
             print("ENCODER DOWN pressed.")
         
         # 4D Encoder left
-        if event.data1 == buttons.get("ENCODER_LEFT")[0] and event.data2 == buttons.get("ENCODER_LEFT")[1]:
+        if event.data1 == encoderHandler("X") and event.data2 == buttons.get("LEFT"):
             print("ENCODER LEFT pressed.")
         
         # 4D Encoder right
-        if event.data1 == buttons.get("ENCODER_RIGHT")[0] and event.data2 == buttons.get("ENCODER_RIGHT")[1]:
+        if event.data1 == encoderHandler("X") and event.data2 == buttons.get("RIGHT"):
             print("ENCODER RIGHT pressed.")
 
         # 4D Encoder buttons
@@ -478,6 +513,9 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
 
+    peakL = kwargs.get("peakL", None)
+    peakR = kwargs.get("peakR", None)
+
     # Compatibility behaviour for older implementations of the layer before the addition of track_types
     # This will retrieve the correct value in case the developer used the string based declaration
     if type(value) == str:
@@ -486,37 +524,11 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
     # Defines the behaviour for when additional info is reported (for track name, track pan, track volume and peak values)
     if info != None:
+        # Tells Python that the additional_info argument is in UTF-8
+        info = info.encode("UTF-8")
 
-        # Bifurcation of behaviour to stablish the different treatment(s) that certain type of data has to recieve before being sent to the device
-        
-        # For peak values
-        # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
-        # in case peak values are specified
-        if info_type == "PEAK":
-            
-            # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
-            if info[0] >= 1.1:
-                info[0] = 1.1
-            
-            if info[1] >= 1.1:
-                info[1] = 1.1
-            
-            # Translates the 0-1.1 range to 0-127 range
-            info[0] = info[0] * (127 / 1.1)
-            info[1] = info[1] * (127 / 1.1)
-            
-            # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
-            info[0] = round(info[0])    # Left peak
-            info[1] = round(info[1])    # Right peak
-            
-
-        # For string-based data
-        else:
-            # Tells Python that the additional_info argument is in UTF-8
-            info = info.encode("UTF-8")
-
-            # Converts the text string to a list of Unicode values
-            info = list(bytes(info))
+        # Converts the text string to a list of Unicode values
+        info = list(bytes(info))
         
         # Conforms the kind of message midiOutSysex is waiting for
         msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + info + [247]
@@ -525,7 +537,36 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
         device.midiOutSysex(bytes(msg))
 
     # Defines how the method should work normally
-    else:
+    elif info == None:
         
         # Takes the information and wraps it on how it should be sent and sends the message
         device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID, 247]))
+
+    
+    # For peak values
+    # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
+    # in case peak values are specified
+    if peakL and peakR != None:
+            
+        # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
+        if peakL >= 1.1:
+            peakL = 1.1
+        
+        if peakR >= 1.1:
+            peakR = 1.1
+        
+        # Translates the 0-1.1 range to 0-127 range
+        peakL = peakL * (127 / 1.1)
+        peakR = peakR * (127 / 1.1)
+        
+        # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
+        info[0] = round(info[0])    # Left peak
+        info[1] = round(info[1])    # Right peak
+
+        # Conforms the kind of message midiOutSysex is waiting for
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + [peakL] + [peakR] + [247]
+
+        # Warps the data and sends it to the device
+        device.midiOutSysex(bytes(msg))
+
+        
