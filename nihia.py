@@ -558,8 +558,8 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
         peakR = peakR * (127 / 1.1)
         
         # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
-        info[0] = round(info[0])    # Left peak
-        info[1] = round(info[1])    # Right peak
+        peakL = round(peakL)    # Left peak
+        peakR = round(peakR)    # Right peak
 
         # Conforms the kind of message midiOutSysex is waiting for
         msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID] + [peakL] + [peakR] + [247]
