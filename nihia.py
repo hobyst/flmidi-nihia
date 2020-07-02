@@ -293,18 +293,16 @@ buttons = {
     # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
     # 
     # data1 values are inverted for the axis of the 4D Encoder between A/M devices and S devices
-    "ENCODER_RIGHT_A": [50, 1],
-    "ENCODER_LEFT_A": [50, 127],
+    # The values represented here correspond to A/M-Series
+    "ENCODER_X_A": 50,
+    "ENCODER_X_S": 48,
+    "RIGHT": 1,
+    "LEFT": 127,
     
-    "ENCODER_UP_A": [48, 127],
-    "ENCODER_DOWN_A": [48, 1],
-
-
-    "ENCODER_RIGHT_S": [48, 1],
-    "ENCODER_LEFT_S": [48, 127],
-    
-    "ENCODER_UP_S": [50, 127],
-    "ENCODER_DOWN_S": [50, 1],
+    "ENCODER_Y_A": 48,
+    "ENCODER_Y_S": 50,
+    "UP": 127,
+    "DOWN": 1,
 
     "ENCODER_PLUS": [52, 1],
     "ENCODER_MINUS": [52, 127]
