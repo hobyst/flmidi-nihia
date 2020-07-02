@@ -293,11 +293,18 @@ buttons = {
     # For example, if you want to retrieve the data1 value for ENCODER_PLUS you would do nihia.buttons.get("ENCODER_PLUS")[0]
     # 
     # data1 values are inverted for the axis of the 4D Encoder between A/M devices and S devices
-    "ENCODER_RIGHT": [50, 1],
-    "ENCODER_LEFT": [50, 127],
+    "ENCODER_RIGHT_A": [50, 1],
+    "ENCODER_LEFT_A": [50, 127],
     
-    "ENCODER_UP": [48, 127],
-    "ENCODER_DOWN": [48, 1],
+    "ENCODER_UP_A": [48, 127],
+    "ENCODER_DOWN_A": [48, 1],
+
+
+    "ENCODER_RIGHT_S": [48, 1],
+    "ENCODER_LEFT_S": [48, 127],
+    
+    "ENCODER_UP_S": [50, 127],
+    "ENCODER_DOWN_S": [50, 1],
 
     "ENCODER_PLUS": [52, 1],
     "ENCODER_MINUS": [52, 127]
@@ -369,26 +376,6 @@ track_types = {
     "RETURN_BUS": 5,
     "MASTER": 6
 }
-
-
-# Sets the 4D Encoder axis to the right one depending on the device
-if device_series == "A_SERIES" or "M_SERIES":
-    buttons["ENCODER_RIGHT"][0] = 50
-    buttons["ENCODER_LEFT"][0] = 50
-
-    buttons["ENCODER_UP"][0] = 48
-    buttons["ENCODER_DOWN"][0] = 48
-
-if device_series == "S_SERIES":
-    buttons["ENCODER_RIGHT"][0] = 48
-    buttons["ENCODER_LEFT"][0] = 48
-
-    buttons["ENCODER_UP"][0] = 50
-    buttons["ENCODER_DOWN"][0] = 50
-
-
-
-
 
 
 
