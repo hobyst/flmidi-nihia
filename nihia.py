@@ -556,10 +556,10 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
                 peakValues[x] = 1.1
         
             # Translates the 0-1.1 range to 0-127 range
-            peak[x] = peakValues[x] * (127 / 1.1)
+            peakValues[x] = peakValues[x] * (127 / 1.1)
         
             # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
-            peak[x] = math.trunc(peakValues[x])
+            peakValues[x] = math.trunc(peakValues[x])
 
         # Conforms the kind of message midiOutSysex is waiting for
         msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), 2, trackID] + peakValues + [247]
