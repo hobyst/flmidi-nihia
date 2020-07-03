@@ -415,7 +415,6 @@ track_types = {
 
 
 
-
 # Method to make talking to the device less annoying
 # All the messages the device is expecting have a structure of "BF XX XX"
 # The STATUS byte always stays the same and only the DATA1 and DATA2 vary
