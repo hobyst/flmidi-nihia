@@ -507,7 +507,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
      - info: Used for track name, track pan, track volume and the Komplete Kontrol instance ID.
 
-     - peak: For peak values. They can be neither integers or floats, and they will get reformated automatically. You can
+     - peakValues: For peak values. They can be neither integers or floats, and they will get reformated automatically. You can
     also use the `mixer.getTrackPeaks` function directly to fill the argument, but remember you have to specify the left and the right channel separately. You have to 
     report them as a list of values: `peak=[peakL_0, peakR_0, peakL_1, peakR_1 ...]`
     """
@@ -516,7 +516,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     value = kwargs.get("value", 0)
     info = kwargs.get("info", None)
 
-    peak = kwargs.get("peak", None)
+    peakValues = kwargs.get("peakValues", None)
 
     # Compatibility behaviour for older implementations of the layer before the addition of track_types
     # This will retrieve the correct value in case the developer used the string based declaration
@@ -548,21 +548,21 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     # For peak values
     # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
     # in case peak values are specified
-    if peak != None:
+    if peakValues != None:
             
         for x in range(0, 15):
             # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
-            if peak[x] >= 1.1:
-                peak[x] = 1.1
+            if peakValues[x] >= 1.1:
+                peakValues[x] = 1.1
         
             # Translates the 0-1.1 range to 0-127 range
-            peak[x] = peak[x] * (127 / 1.1)
+            peak[x] = peakValues[x] * (127 / 1.1)
         
             # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
-            peak[x] = math.trunc(peak[x])
+            peak[x] = math.trunc(peakValues[x])
 
         # Conforms the kind of message midiOutSysex is waiting for
-        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), 2, trackID] + peak + [247]
+        msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), 2, trackID] + peakValues + [247]
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
