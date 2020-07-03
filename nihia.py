@@ -550,7 +550,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
     # in case peak values are specified
     if peakValues != None:
             
-        for x in range(0, 15):
+        for x in range(0, 16):
             # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
             if peakValues[x] >= 1.1:
                 peakValues[x] = 1.1
