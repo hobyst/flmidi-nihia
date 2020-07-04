@@ -401,7 +401,7 @@ mixerinfo_types = {
     "SELECTED": 66,
 
     "SELECTED_AVAILABLE": 104,
-    "SELECTED_MUTE_BY_SOLO": 104,
+    "SELECTED_MUTE_BY_SOLO": 105,
 
     # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
     "PEAK": 73,
