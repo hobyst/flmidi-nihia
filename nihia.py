@@ -589,7 +589,7 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
 # Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are
 def mixerSetGraph(trackID: int, graph: str, location: float):
-    """" Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are.
+    """ Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are.
     ### Parameters
     
      - trackID: From 0 to 7, the track whose the graph you want to update belongs to.
