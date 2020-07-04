@@ -613,7 +613,7 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
     if graph == "PAN":
         # Translates the -1 to 1 range to 0-127 range
         if location < 0:  # If the pan is negative, for hence is set to the left
-            abs(location)
+            location = abs(location)    # Gets the absolute value of the location
             location = location * 63
         
         elif location == 0: # If the pan is negative, for hence is set to the center
