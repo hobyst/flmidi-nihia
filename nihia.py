@@ -400,7 +400,28 @@ mixerinfo_types = {
     # In case there's one, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="NIKBxx")
     # In case there's none, we would use mixerSendInfo("KOMPLETE_INSTANCE", trackID, info="")
     # NIKBxx is the name of the first automation parameter of the Komplete Kontrol plugin
-    "KOMPLETE_INSTANCE": 65
+    "KOMPLETE_INSTANCE": 65,
+
+    # The S-Series keyboard have two arrows that graphically show the position of the volume fader and the pan on the screen
+    # These definitions have the MIDI values that have to be set as the data1 value of a simple MIDI message to tell the device where the volume arrow
+    # or the pan arrow should be for the first track
+    # For the rest of the tracks, you sum incrementally
+    # Example:
+    # ----------------------------------------------------
+    # BF 50 00  // Moves the volume fader of the first track down to the bottom 
+    # BF 50 40  // Moves the volume fader of the first track to the middle
+    # 
+    # BF 51 00  // Moves the volume fader of the second track down to the bottom 
+    # BF 51 40  // Moves the volume fader of the second track to the middle
+    # 
+    # BF 58 00  // Moves the pan fader of the first track down to the bottom 
+    # BF 58 40  // Moves the pan fader of the first track to the middle
+    # 
+    # BF 59 00  // Moves the pan fader of the second track down to the bottom 
+    # BF 59 40  // Moves the pan fader of the second track to the middle    
+    
+    "VOLUME_GRAPH": 80,
+    "PAN_GRAPH": 88,
 }
 
 # Track types dictionary
@@ -487,8 +508,6 @@ def buttonSetLight(buttonName: str, lightMode: int):
 
 
 
-
-
 # Method for reporting information about the mixer tracks, which is done through SysEx
 # Couldn't make this one as two different functions under the same name since Python doesn't admit function overloading
 def mixerSendInfo(info_type: str, trackID: int, **kwargs):
@@ -567,4 +586,47 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
 
+
+# Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are
+def mixerSetGraph(trackID: int, graph: str, location: float):
+    """" Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are.
+    ### Parameters
+    
+     - trackID: From 0 to 7, the track whose the graph you want to update belongs to.
+     - graph: The graph you are going to change. Can be VOLUME or PAN.
+     - location: Can be filled using `mixer.getTrackVolume()` and `mixer.getTrackPan()`.
+         - `graph = "VOLUME"`: From 0  to 1.
+         - `graph = "PAN"`: From -1 to 1.
+    """
+    # Gets the right data1 value depending on the graph that has to be updated
+    if graph == "VOLUME":
+        graphValue = buttons.get("VOLUME_GRAPH")
+    
+    if graph == "PAN":
+        graphValue = buttons.get("PAN_GRAPH")
+    
+    # Adapts the given location value to MIDI values depending on the graph that is going to be updated
+    if graph == "VOLUME":
+        # Translates the 0-1 range to 0-127 range
+        location = location * 127
+    
+    if graph == "PAN":
+        # Translates the -1 to 1 range to 0-127 range
+        if location < 0:  # If the pan is negative, for hence is set to the left
+            abs(location)
+            location = location * 63
         
+        if location == 0: # If the pan is negative, for hence is set to the center
+            location = 64
+        
+        if location > 0:  # If the pan is positive, for hence is set to the right
+            location = 64 + location * 63
+    
+
+    # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
+    location = int(math.trunc(location))
+
+    # Reports the change of the desired graph to the device
+    dataOut(graphValue + trackID, location)
+    
+    
