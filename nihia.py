@@ -600,10 +600,10 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
     """
     # Gets the right data1 value depending on the graph that has to be updated
     if graph == "VOLUME":
-        graphValue = buttons.get("VOLUME_GRAPH")
+        graphValue = int(buttons.get("VOLUME_GRAPH"))
     
     if graph == "PAN":
-        graphValue = buttons.get("PAN_GRAPH")
+        graphValue = int(buttons.get("PAN_GRAPH"))
     
     # Adapts the given location value to MIDI values depending on the graph that is going to be updated
     if graph == "VOLUME":
