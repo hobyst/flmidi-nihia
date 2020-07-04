@@ -616,10 +616,10 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
             abs(location)
             location = location * 63
         
-        if location == 0: # If the pan is negative, for hence is set to the center
+        elif location == 0: # If the pan is negative, for hence is set to the center
             location = 64
         
-        if location > 0:  # If the pan is positive, for hence is set to the right
+        elif location > 0:  # If the pan is positive, for hence is set to the right
             location = 64 + location * 63
     
 
