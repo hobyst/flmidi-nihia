@@ -334,6 +334,7 @@ buttons = {
     # 
     # data1 values are inverted for the axis of the 4D Encoder between A/M devices and S devices
     # The values represented here correspond to A/M-Series
+    # D-pad
     "ENCODER_X_A": 50,
     "ENCODER_X_S": 48,
     "RIGHT": 1,
@@ -344,8 +345,14 @@ buttons = {
     "UP": 127,
     "DOWN": 1,
 
-    "ENCODER_PLUS": [52, 1],
-    "ENCODER_MINUS": [52, 127]
+    # Jog / knob
+    "ENCODER_GENERAL": 52,
+    "ENCODER_VOLUME_SELECTED": 100,
+    "ENCODER_PAN_SELECTED": 101,
+
+    "PLUS": 1,
+    "MINUS": 127,
+
 }
 
 # Knob to knob ID dictionary
@@ -392,6 +399,9 @@ mixerinfo_types = {
     # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
     "EXIST": 64,
     "SELECTED": 66,
+
+    "SELECTED_AVAILABLE": 104,
+    "SELECTED_MUTE_BY_SOLO": 104,
 
     # This one only will make an effect on devices with full feature support, like the S-Series MK2 and it's used to send the peak meter information
     "PEAK": 73,
@@ -629,4 +639,26 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
     # Reports the change of the desired graph to the device
     dataOut(graphValue + trackID, location)
     
+
+def mixerSendInfoSelected(info_type: str, info: str):
+    """ Makes the device report MIDI messages for volume and pan adjusting for the selected track when exsitance of this track is reported as true.
+    ### Parameters
+     - info_type: The data you are going to tell about the selected track.
+         - SELECTED: If there's a track selected on the mixer or not.
+         - MUTE_BY_SOLO: To tell if it's muted by solo.
+     - info: The value of the info you are telling.
+         - `info_type = SELECTED`: The track type as defined on `track_types`.
+         - `info_type = MUTE_BY_SOLO`: Yes or no.
+    """
+    if info_type == "SELECTED":
+        info_type = mixerinfo_types.get("SELECTED_AVAILABLE")
+
+        info = track_types.get(info)
     
+    # Not implemented yet in FL Studio
+    if info_type == "MUTE_BY_SOLO":
+        info_type = mixerinfo_types.get("SELECTED_MUTE_BY_SOLO")
+    
+
+    # Sends the message
+    dataOut(info_type, info)
