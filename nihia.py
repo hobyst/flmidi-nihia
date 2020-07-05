@@ -510,7 +510,10 @@ def buttonSetLight(buttonName: str, lightMode: int):
     #Light mode integer to light mode hex dictionary
     lightModes = {
         0: 0,
-        1: 1
+        1: 1,
+
+        # For setting lights on of the right and down dot lights of the 4D Encoder on S-Series devices
+        127: 127
     }
 
     # Then sends the MIDI message using dataOut
