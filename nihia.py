@@ -570,17 +570,10 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
 
-    # Defines how the method should work normally
-    elif info == None:
-        
-        # Takes the information and wraps it on how it should be sent and sends the message
-        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID, 247]))
-
-    
     # For peak values
     # Takes each value from the dictionary and rounds it in order to avoid conflicts with hexadecimals only being "compatible" with integer numbers 
     # in case peak values are specified
-    if peakValues != None:
+    elif peakValues != None:
             
         for x in range(0, 16):
             # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
@@ -598,6 +591,12 @@ def mixerSendInfo(info_type: str, trackID: int, **kwargs):
 
         # Warps the data and sends it to the device
         device.midiOutSysex(bytes(msg))
+
+    # Defines how the method should work normally
+    elif info == None:
+        
+        # Takes the information and wraps it on how it should be sent and sends the message
+        device.midiOutSysex(bytes([240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get(info_type), value, trackID, 247]))
 
 
 # Method for changing the locations of the pan and volume arrows on the screen of S-Series devices to graphically show where the pan and volume faders are
