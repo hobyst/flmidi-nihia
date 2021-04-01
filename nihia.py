@@ -351,7 +351,7 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
     if graph == "VOLUME":
         graphValue = mixerinfo_types.get("VOLUME_GRAPH")
     
-    if graph == "PAN":
+    elif graph == "PAN":
         graphValue = mixerinfo_types.get("PAN_GRAPH")
     
     # Adapts the given location value to MIDI values depending on the graph that is going to be updated
@@ -359,7 +359,7 @@ def mixerSetGraph(trackID: int, graph: str, location: float):
         # Translates the 0-1 range to 0-127 range
         location = location * 127
     
-    if graph == "PAN":
+    elif graph == "PAN":
         # Translates the -1 to 1 range to 0-127 range
         if location < 0:  # If the pan is negative, for hence is set to the left
             location = abs(location)    # Gets the absolute value of the location
@@ -395,7 +395,7 @@ def mixerSendInfoSelected(info_type: str, info: str):
         info = track_types.get(info)
     
     # Not implemented yet in FL Studio
-    if info_type == "MUTE_BY_SOLO":
+    elif info_type == "MUTE_BY_SOLO":
         info_type = mixerinfo_types.get("SELECTED_MUTE_BY_SOLO")
     
 
