@@ -30,271 +30,12 @@
 # features on Native Instruments' devices
 # Any device with this kind of features will make use of this script
 
-import patterns
-import mixer
 import device
-import transport
-import arrangement
-import general
-import launchMapPages
-import playlist
 
 import midi
 import utils
 
 import math
-
-###########################################################################################################################################
-# Editable variables
-###########################################################################################################################################
-
-# Adjusts behaviour depending on which device is talking to
-# If set to "S_SERIES" it will adapt for S-Series devices
-# If set to "A_SERIES" OR "M_SERIES" it will adapt for A-Series and M-Series devices
-DEVICE_SERIES = "A_SERIES"
-
-###########################################################################################################################################
-# Test tools
-###########################################################################################################################################
-
-test = ""
-
-def encoderHandler(axis: str) -> int:
-    """ Allows to handle the inversion of axis of the 4D Encoder that happens between A/M-Series devices and S-Series devices, by 
-    returning the right MIDI value FL Studio has to check for.
-    ### Parameters
-     - axis: The axis you want to get the value for.
-    """
-    devices = {
-        "A_SERIES": 1,
-        "M_SERIES": 1,
-        "S_SERIES": 2
-    }
-
-    device = devices.get(DEVICE_SERIES)
-
-    # Device check
-    if device == 1:
-        # X axis
-        if axis == "X":
-           return buttons.get("ENCODER_X_A")
-        
-        # Y axis
-        if axis == "Y":
-           return buttons.get("ENCODER_Y_A")
-
-    if device == 2:
-        # X axis
-        if axis == "X":
-           return buttons.get("ENCODER_X_S")
-        
-        # Y axis
-        if axis == "Y":
-           return buttons.get("ENCODER_Y_S")
-    
-def OnInit():
-        handShake()
-
-        print("Set DEVICE_SERIES to the kind of device you are using in order to avoid problems with the 4D Encoder.")
-
-
-def OnMidiIn(event):
-    if test == "input":
-
-        # Play button
-        if event.data1 == buttons.get("PLAY"):
-            print("PLAY button pressed.")
-
-        # Restart button
-        if event.data1 == buttons.get("RESTART"):
-            print("RESTART button pressed.")
-
-        # Record button
-        if event.data1 == buttons.get("REC"):
-            print("REC button pressed.")
-        
-        # Count-In button
-        if event.data1 == buttons.get("COUNT_IN"):
-            print("COUNT_IN button pressed.")
-
-        # Stop button
-        if event.data1 == buttons.get("STOP"):
-            print("STOP button pressed.")
-
-        # Clear button
-        if event.data1 == buttons.get("CLEAR"):
-            print("CLEAR button pressed.")
-        
-        # Loop button
-        if event.data1 == buttons.get("LOOP"):
-            print("LOOP button pressed.")
-
-        # Metronome button
-        if event.data1 == buttons.get("METRO"):
-            print("METRO button pressed.")
-        
-        # Tempo button
-        if event.data1 == buttons.get("TEMPO"):
-            print("TEMPO button pressed.")
-
-        # Undo button
-        if event.data1 == buttons.get("UNDO"):
-            print("UNDO button pressed.")
-        
-        # Redo button
-        if event.data1 == buttons.get("REDO"):
-            print("REDO button pressed.")
-
-        # Quantize button
-        if event.data1 == buttons.get("QUANTIZE"):
-            print("QUANTIZE button pressed.")
-
-        # Automation button
-        if event.data1 == buttons.get("AUTO"):
-            print("AUTO button pressed.")
-
-        # Mute button
-        if event.data1 == buttons.get("MUTE"):
-            print("MUTE button pressed.")
-
-        # Solo button
-        if event.data1 == buttons.get("SOLO"):
-            print("SOLO button pressed.")
-
-        # 4D Encoder +
-        if event.data1 == buttons.get("ENCODER_PLUS") and event.data2 == buttons.get("ENCODER_PLUS")[1]:
-            print("ENCODER [+] pressed.")
-
-        # 4D Encoder -
-        if event.data1 == buttons.get("ENCODER_MINUS") and event.data2 == buttons.get("ENCODER_MINUS")[1]:
-            print("ENCODER [-] pressed.")
-        
-        # 4D Encoder up
-        if event.data1 == encoderHandler("Y") and event.data2 == buttons.get("UP"):
-            print("ENCODER UP pressed.")
-        
-        # 4D Encoder down 
-        if event.data1 == encoderHandler("Y") and event.data2 == buttons.get("DOWN"):
-            print("ENCODER DOWN pressed.")
-        
-        # 4D Encoder left
-        if event.data1 == encoderHandler("X") and event.data2 == buttons.get("LEFT"):
-            print("ENCODER LEFT pressed.")
-        
-        # 4D Encoder right
-        if event.data1 == encoderHandler("X") and event.data2 == buttons.get("RIGHT"):
-            print("ENCODER RIGHT pressed.")
-
-        # 4D Encoder buttons
-        if event.data1 == buttons.get("ENCODER_BUTTON"):
-            print("ENCODER BUTTON pressed.")
-
-
-        # Knobs
-        if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("INCREASE"):
-            event.handled = True
-            print("KNOB 1 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_1A") and event.data2 == knobs.get("DECREASE"):
-            event.handled = True
-            print("KNOB 1 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_2A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 2 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_2A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 2 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_3A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 3 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_3A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 3 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_4A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 4 [+] pressed.")
-        
-        if event.data1 == knobs.get("KNOB_4A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 4 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_5A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 5 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_5A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 5 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_6A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 6 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_6A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 6 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_7A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 7 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_7A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 7 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_8A") and event.data2 == knobs.get("INCREASE"):
-            print("KNOB 8 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_8A") and event.data2 == knobs.get("DECREASE"):
-            print("KNOB 8 [-] pressed.")
-        
-
-        
-        if event.data1 == knobs.get("KNOB_1B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 1 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_1B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 1 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_2B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 2 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_2B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 2 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_3B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 3 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_3B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 3 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_4B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 4 [+] pressed.")
-        
-        if event.data1 == knobs.get("KNOB_4B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 4 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_5B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 5 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_5B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 5 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_6B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 6 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_6B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 6 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_7B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 7 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_7B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 7 [-] pressed.")
-
-        if event.data1 == knobs.get("KNOB_8B") and event.data2 == knobs.get("INCREASE"):
-            print("SHIFT + KNOB 8 [+] pressed.")
-
-        if event.data1 == knobs.get("KNOB_8B") and event.data2 == knobs.get("DECREASE"):
-            print("SHIFT + KNOB 8 [-] pressed.")
-
-
-def OnDeInit():
-    goodBye()
-###########################################################################################################################################
 
 
 ###########################################################################################################################################
@@ -355,37 +96,33 @@ buttons = {
 
 }
 
-# Knob to knob ID dictionary
-# The number in the name of the knob refers to the physical knob in the device from left to right
-# The letter at the end represents whether the knob is being shifted or not
+# Knob to knob ID matrix
+# Each knob has two possible DATA1 values, one for volume and another for pan adjustment
+# The rows specify the knob mode (volume adjustment and shifted/pan adjustment knobs)
+# The columns specify the knob
 # Example:
-#   KNOB_1A --> First knob without shift. It is meant to adjust volume
-#   KNOB_1B --> First knob shifted (SHIFT button is being held down while using the knob). It is meant to adjust panning
-knobs = {
-    "KNOB_1A": 80,
-    "KNOB_2A": 81,
-    "KNOB_3A": 82,
-    "KNOB_4A": 83,
-    "KNOB_5A": 84,
-    "KNOB_6A": 85,
-    "KNOB_7A": 86,
-    "KNOB_8A": 87,
-    
-    "KNOB_1B": 88,
-    "KNOB_2B": 89,
-    "KNOB_3B": 90,
-    "KNOB_4B": 91,
-    "KNOB_5B": 92,
-    "KNOB_6B": 93,
-    "KNOB_7B": 94,
-    "KNOB_8B": 95,
+#   knobs[0][0] --> First knob without shift. It is meant to adjust volume.
+#   knobs[0][1] --> First knob shifted (SHIFT button is being held down while using the knob). It is meant to adjust panning.
+knobs = [
+    [80, 81, 82, 83, 84, 85, 86, 87],
+    [88, 89, 90, 91, 92, 93, 94, 95]
+]
 
-    "INCREASE": 63,
-    "DECREASE": 65
-}
+# The DATA2 value of a knob turning message specifies the speed the user is turning the knob at
+# On S-Series keyboards, the knobs are speed-sensitive and send different DATA2 values to specify the turning speed
+# - If turned clockwise, the speed will go from 0 to 63 (slowest to fastest)
+# - If turned counterclockwise, the speed will go from 127 to 65 (slowest to fastest, they are inverted)
+# On A/M-Series, the knobs aren't speed-sensitive and they will always report the max value for each direction
+# - If turned clockwise, the DATA2 value will be 63
+# - If turned counterclockwise, the DATA2 value will be 65
+KNOB_INCREASE_MIN_SPEED = 0     # DATA2 byte sent by the keyboard on clockwise knob turning messages at minimum speed
+KNOB_INCREASE_MAX_SPEED = 63    # DATA2 byte sent by the keyboard on clockwise knob turning messages at maximum speed
+
+KNOB_DECREASE_MIN_SPEED = 127   # DATA2 byte sent by the keyboard on counterclockwise knob turning messages at minimum speed
+KNOB_DECREASE_MAX_SPEED = 65    # DATA2 byte sent by the keyboard on counterclockwise knob turning messages at maximum speed
 
 # Dictionary that goes between the different kinds of information that can be sent to the device to specify information about the mixer tracks
-# and their corresponding identificative bytes
+# and their corresponding identification bytes
 mixerinfo_types = {
     "VOLUME": 70,
     "PAN": 71,
