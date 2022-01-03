@@ -263,19 +263,10 @@ def sendPeakMeterData(peakValues: list):
     """ Send peak meter data to be displayed on the device.
 
     ### Arguments
-     - peakValues (list): A list of 16 values representing peak values for each track and stereo channel like ``[peakL_0, peakR_0, peakL_1, peakR_1 ...]``
+     - peakValues (list): A list of 16 integer values representing peak values for each track and stereo channel like ``[peakL_0, peakR_0, peakL_1, peakR_1 ...]``
+     in a range of 0 to 127. To convert values coming from FL Studio's ``mixer.getTrackPeaks()`` function, the reccomended range is 0 to 1.1 so that any value
+     greater than 1.1 should be set to 1.1 anyway.
     """
-
-    for x in range(0, 16):
-        # Makes the max of the peak meter on the device match the one on FL Studio (values that FL Studio gives seem to be infinite)
-        if peakValues[x] >= 1.1:
-            peakValues[x] = 1.1
-    
-        # Translates the 0-1.1 range to 0-127 range
-        peakValues[x] = peakValues[x] * (127 / 1.1)
-    
-        # Truncates the possible decimals and declares the number as an integer to avoid errors in the translation of the data
-        peakValues[x] = int(math.trunc(peakValues[x]))
 
     # Conforms the kind of message midiOutSysex is waiting for
     msg = [240, 0, 33, 9, 0, 0, 68, 67, 1, 0, mixerinfo_types.get("PEAK"), 2, 0] + peakValues + [247]
