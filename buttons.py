@@ -45,6 +45,7 @@ button_list = {
     "QUANTIZE": 34,
     "AUTO": 35,
 
+    "TRACK_SELECT": 66,
     "MUTE": 67,
     "SOLO": 68,
 
