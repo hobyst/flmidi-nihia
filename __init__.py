@@ -52,7 +52,7 @@ def dataOut(data1: int or hex, data2: int or hex):
     data1, data2 -- Corresponding bytes of the MIDI message."""
     
     # Composes the MIDI message and sends it
-    device.midiOutSysex(bytes([240, 191, data1, data2, 247]))
+    device.midiOutMsg(191, 0, data1, data2)
 
 # Method to enable the deep integration features on the device
 def handShake():
