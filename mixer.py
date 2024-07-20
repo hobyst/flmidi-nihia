@@ -1,6 +1,6 @@
 # MIT License
 
-# Copyright (c) 2021 Pablo Peral
+# Copyright (c) 2024 Pablo Peral
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -246,16 +246,15 @@ def setTrackMutedBySolo(trackID:int, value: bool):
     # Warps the data and sends it to the device
     device.midiOutSysex(bytes(msg))
 
-def setTrackKompleteInstance(trackID: int, instanceID: str):
-    """ Method to report the Komplete Kontrol instance a mixer track is associated to.
+def setKompleteInstance(instanceID: str):
+    """ Method to report the currently selected Komplete Kontrol instance.
     
     ### Arguments
-    - trackID (int): From 0 to 7, the number of the track being represented on the display.
     - instanceID (str): The `NIKBxx` string retrieved from the name of the first automation parameter of the Komplete Kontrol instance.
       If it's left to nothing (`""`), the Komplete Kontrol integration will be disabled for that track.
     """
 
-    msg = nihia.SYSEX_HEADER + [mixerinfo_types.get("KOMPLETE_INSTANCE"), 0, trackID] + Str2Bytes(instanceID) + [247]
+    msg = nihia.SYSEX_HEADER + [mixerinfo_types.get("KOMPLETE_INSTANCE"), 0, 0] + Str2Bytes(instanceID) + [247]
 
     device.midiOutSysex(bytes(msg))
 
