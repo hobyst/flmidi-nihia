@@ -74,7 +74,7 @@ mixerinfo_types = {
     # This one makes more sense on DAWs that create more tracks as the user requests it, as there might be projects (for example) on Ableton Live
     # with only two tracks
     # However, since FL Studio has all playlist and mixer tracks created, it has no use at all (maybe on the channel rack) and all tracks should have
-    # their existance reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
+    # their existence reported as 1 (which means the track exists) in order to light on the Mute and Solo buttons on the device
     "EXIST": 64,
     "SELECTED": 66,
 
@@ -113,7 +113,7 @@ mixerinfo_types = {
 }
 
 # Track types dictionary
-# Used when reporting existance of tracks
+# Used when reporting existence of tracks
 track_types = {
     "EMPTY": 0,
     "GENERIC": 1,
@@ -264,7 +264,7 @@ def sendPeakMeterData(peakValues: list):
 
     ### Arguments
      - peakValues (list): A list of 16 integer values representing peak values for each track and stereo channel like ``[peakL_0, peakR_0, peakL_1, peakR_1 ...]``
-     in a range of 0 to 127. To convert values coming from FL Studio's ``mixer.getTrackPeaks()`` function, the reccomended range is 0 to 1.1 so that any value
+     in a range of 0 to 127. To convert values coming from FL Studio's ``mixer.getTrackPeaks()`` function, the recommended range is 0 to 1.1 so that any value
      greater than 1.1 should be set to 1.1 anyway.
     """
 

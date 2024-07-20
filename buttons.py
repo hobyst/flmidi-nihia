@@ -28,7 +28,7 @@ import nihia
 
 # Button name to button ID dictionary
 # The button ID is the number in hex that is used as the DATA1 parameter when a MIDI message related to that button is
-# sent or recieved from the device
+# sent or received from the device
 button_list = {
     "PLAY": 16,
     "RESTART": 17,
@@ -45,13 +45,18 @@ button_list = {
     "QUANTIZE": 34,
     "AUTO": 35,
 
+    # Button IDs for the S-Series white mixer track buttons located on top of the screen
+    # When sent, the DATA2 value is an integer of range 0-7 indicating which of the 8 tracks
+    # being displayed on the device is being selected, muted, or solo-ed
     "TRACK_SELECT": 66,
     "MUTE": 67,
     "SOLO": 68,
 
+    # Mute or solo currently selected track
     "MUTE_SELECTED": 102,
     "SOLO_SELECTED": 103,
 
+    # 4D encoder pressed as a button
     "ENCODER_BUTTON": 96,
     "ENCODER_BUTTON_SHIFTED": 97,
     
@@ -71,11 +76,12 @@ button_list = {
     "UP": 127,
     "DOWN": 1,
 
-    # Jog / knob
+    # 4D encoder when used as a knob
     "ENCODER_GENERAL": 52,
     "ENCODER_VOLUME_SELECTED": 100,
     "ENCODER_PAN_SELECTED": 101,
 
+    # 4D encoder action (DATA2 value) when used as a knob
     "PLUS": 1,
     "MINUS": 127
 }
